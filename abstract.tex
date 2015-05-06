@@ -4,23 +4,28 @@
 % {\large \textbf{Abstract}}
 % \end{center}
 \begin{abstract}
-Hardware transactional memory is a promising solution to the synchronization
-problem in multicore software due to its simple semantics and good performance
-relative to traditional approaches.
-Hardware transactions perform well because the overhead of implementing
-transactional memory semantics is incurred at the hardware level, which is much
-faster than traditional software implementations.
-This reason for their good performance, however, is also the root of their
-problems--hardware transactions will abort when the working set exceeds the
+Hardware transactional memory (HTM) is a promising solution to the synchronization
+problem in multicore software due to its simple semantics and superior performance
+relative to coarse-grain locks.
+Hardware transactions offer a performance advantage
+over software implementations by harnessing the power
+of existing cache-coherence mechanisms which are already
+fast, automatic, and parallel. 
+The source of superior performance, however, is also the root of their
+weakness: existing implementations of hardware transactions 
+will abort when the working set exceeds the
 capacity of the underlying hardware.
 Before we can incorporate this nascent technology into high-performing
-concurrent programs, it is necessary to first investigate the physical capacity
-constraints of hardware transactions so that we know when they are not a
-feasible solution at all.
-Our investigation led to revelations about where hardware transactions are
-physically implemented on Intel x86 and IBM PowerPC architectures; we anticipate
-these findings will increase general understanding of hardware transactional
-memory, thus enabling its proliferation into future concurrent programs.
+concurrent data structures, 
+it is necessary to first investigate the physical capacity
+constraints of hardware transactions to inform the design
+of such data structures.
+We were able to divine details of the HTM implementation
+of Intel's Haswell and IBM's PowerPC architectures from 
+our investigation of the capacity constraints and these 
+characterizations provide much needed understanding of the
+systems for which practitioners design algorithms and 
+data structures.
 \end{abstract}
 % \end{minipage}
 % \end{center}
