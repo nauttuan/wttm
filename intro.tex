@@ -1,0 +1,41 @@
+\section{Introduction}
+As Moore's law for single core microprocessors reaches a plateau, the transition
+to multicore microprocessors is in full swing. High-performing concurrent
+programs require the effective utilization of these multicore chips, but the
+synchronization overhead involved in maintaining memory consistency has been a
+major roadblock to building fast concurrent programs.
+
+With the advent of Intel and IBM microprocessors that support \textit{hardware
+transactional memory}, a new contender to solving the synchronization problem is
+on the horizon. Hardware transactions are faster than traditional
+\textit{coarse-grained locks} and \textit{software transactions}, yet they do
+not suffer from the same performance-complexity tradeoff that makes
+\textit{fine-grained locks} and atomic CPU instructions, like
+\textit{compare-and-swap}, less desirable. Before we can even hope to
+effectively use this new technology, however, we must first learn more about
+what limitations the underlying hardware imposes on hardware transactions.
+
+Implementing transactions involves the logical maintenance of read sets, the set
+of memory locations that are read within a transaction, and write sets, the set
+of memory locations that are written within a transaction. When transactional
+blocks execute, local reads and writes to memory are tracked and recorded in
+corresponding read sets and write sets. Upon completion of a transactional
+block, the memory state is validated for consistency before the transaction
+\textit{commits} and the modifications to memory are installed.
+
+Concurrently running transactions may \textit{abort} due to a conflict when an
+inconsistent memory state is detected, such as when one or many memory locations
+in one thread's write set intersects one or many memory locations in another
+thread's read set or write set. In addition to \textit{conflict aborts},
+hardware transactions specifically suffer from \textit{capacity aborts} when the
+read set or write set is too large to fit into the underlying hardware.
+
+We show in this paper the results of experiments we ran to determine where the
+read sets and write sets are implemented in the Intel x86 and IBM PowerPC
+architectures. The focus of our experiments is to explore scenarios where these
+capacity aborts are inevitable so that we know when hardware transactions are
+not a feasible synchronization solution at all, even in the case of no
+contention. These contributions will provide important insights to the limits of
+hardware transactional memory and better enable its effective utilization in
+future multicore programs.
+ 
