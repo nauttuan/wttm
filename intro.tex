@@ -1,12 +1,24 @@
 \section{Introduction}
-As Moore's law for single core microprocessors reaches a plateau, the transition
-to multicore microprocessors is in full swing. High-performing concurrent
-programs require the effective utilization of these multicore chips, but the
-synchronization overhead involved in maintaining memory consistency has been a
-major roadblock to building fast concurrent programs.
+Random notes:
+\begin{itemize}
+\item Use \defn{defn} blocks to define terms, such as 
+\defn{hardware transactional memory}.  However, \defn{defn} 
+blocks should always have an accompanying definition.  Their
+use is a good mnemonic for remembering that one should define
+important terms.
+\item In text, \textit{italics} and \emph{emphasis} blocks
+are used to draw attention to an otherwise well-defined term
+or phrase.  
+\end{itemize}
 
+
+As Moore's law plateaus, the transition
+to multicore microprocessors is in full swing. High-performing concurrent
+programs require the effective utilization of these multicore chips, but 
+synchronization overhead and complexity has been a
+major roadblock to building fast concurrent programs.
 With the advent of Intel and IBM microprocessors that support \textit{hardware
-transactional memory}, a new contender to solving the synchronization problem is
+transactional memory} (HTM), a new contender to solving the synchronization problem is
 on the horizon. Hardware transactions are faster than traditional
 \textit{coarse-grained locks} and \textit{software transactions}, yet they do
 not suffer from the same performance-complexity tradeoff that makes
