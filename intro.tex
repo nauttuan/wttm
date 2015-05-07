@@ -17,6 +17,10 @@ to multicore microprocessors is in full swing. High-performing concurrent
 programs require the effective utilization of these multicore chips, but 
 synchronization overhead and complexity has been a
 major roadblock to building fast concurrent programs.
+Transactional memory~\cite{HerlihyMo93} was originally
+proposed as a programming abstraction that could achieve
+high performance while maintaining the simplicity of 
+coarse-grained locks~\cite{???}.
 Recently, Intel~\cite{???} and IBM~\cite{???} 
 have both introduced mainstream 
 multicores supporting restricted \defn{hardware
@@ -31,7 +35,7 @@ arising from the imperfect implementation.}~\cite{???}
 and a new ingredient in the solution 
 to the synchronization problem is
 on the horizon. Hardware transactions are faster than traditional
-coarse-grained locks~\cite{???} and software transactions~\cite{???}, 
+coarse-grained locks and software transactions~\cite{???}, 
 yet they have similar performance to well-engineered software
 using fine-grained locks and atomic instructions (e.g.
 \proc{compare-and-swap}~\cite{???})~\cite{???}. 
