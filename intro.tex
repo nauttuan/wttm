@@ -6,48 +6,84 @@ Random notes:
 blocks should always have an accompanying definition.  Their
 use is a good mnemonic for remembering that one should define
 important terms.
-\item In text, \textit{italics} and \emph{emphasis} blocks
+\item In text, \textit{italics} or \emph{emphasis} blocks
 are used to draw attention to an otherwise well-defined term
 or phrase.  
 \end{itemize}
 
 
-As Moore's law plateaus, the transition
+As Moore's law plateaus~\cite{???} the transition
 to multicore microprocessors is in full swing. High-performing concurrent
 programs require the effective utilization of these multicore chips, but 
 synchronization overhead and complexity has been a
 major roadblock to building fast concurrent programs.
-With the advent of Intel and IBM microprocessors that support \textit{hardware
-transactional memory} (HTM), a new contender to solving the synchronization problem is
+Recently, Intel~\cite{???} and IBM~\cite{???} 
+have both introduced mainstream 
+multicores supporting restricted \defn{hardware
+transactional memory} (HTM)\footnote{The Intel and IBM
+systems are both \emph{restricted} in that they are 
+a \emph{best effort} hardware transactional
+memory system~\cite{???}.  This means that there is no 
+guarantee that an attempted
+transaction will complete successfully, even in the absence 
+of contention from other cores, due to hardware restrictions
+arising from the imperfect implementation.}~\cite{???}
+and a new ingredient in the solution 
+to the synchronization problem is
 on the horizon. Hardware transactions are faster than traditional
-\textit{coarse-grained locks} and \textit{software transactions}, yet they do
-not suffer from the same performance-complexity tradeoff that makes
-\textit{fine-grained locks} and atomic CPU instructions, like
-\textit{compare-and-swap}, less desirable. Before we can even hope to
-effectively use this new technology, however, we must first learn more about
-what limitations the underlying hardware imposes on hardware transactions.
+coarse-grained locks~\cite{???} and software transactions~\cite{???}, 
+yet they have similar performance to well-engineered software
+using fine-grained locks and atomic instructions (e.g.
+\proc{compare-and-swap}~\cite{???})~\cite{???}. 
+However, \emph{restricted} HTM introduces a wrinkle into 
+this otherwise panacean technology: sometimes transactions
+will fail even when executed serially due to limitations
+of the underlying hardware implementation.  The conditions
+under which such a failure may occur dramatically impacts
+whether the complexity of designing a software system using HTM
+is justified by the expected performance.  Characterizing
+these conditions is the goal of this paper. 
 
-Implementing transactions involves the logical maintenance of read sets, the set
-of memory locations that are read within a transaction, and write sets, the set
-of memory locations that are written within a transaction. When transactional
-blocks execute, local reads and writes to memory are tracked and recorded in
-corresponding read sets and write sets. Upon completion of a transactional
-block, the memory state is validated for consistency before the transaction
-\textit{commits} and the modifications to memory are installed.
+Transactions require the logical 
+maintenance of \defn{read sets}, the set
+of memory locations that are read within a 
+transaction, and \defn{write sets}, the set
+of memory locations that are written within 
+a transaction~\cite{???}. When transactions execute, 
+local reads and writes to memory 
+are tracked and recorded in
+corresponding read sets and write sets. Upon 
+completion of a transaction, the memory state is validated for 
+consistency before the transaction
+\defn{commits}, meaning that the modifications to 
+memory are visible to other threads.
 
-Concurrently running transactions may \textit{abort} due to a conflict when an
-inconsistent memory state is detected, such as when one or many memory locations
-in one thread's write set intersects one or many memory locations in another
-thread's read set or write set. In addition to \textit{conflict aborts},
-hardware transactions specifically suffer from \textit{capacity aborts} when the
-read set or write set is too large to fit into the underlying hardware.
+Transactions may \defn{abort} due to a conflict with
+another concurrently executing transaction when an
+inconsistent memory state is detected, 
+such as when one or many memory locations
+in one thread's write set intersects one or 
+many memory locations in another
+thread's read set or write set.  We call this a
+\defn{conflict abort}.  In addition to \defn{conflict aborts},
+hardware transactions specifically suffer 
+from \textit{capacity aborts} when the underlying hardware
+lacks sufficient resources to maintain the
+read or write set.
 
-We show in this paper the results of experiments we ran to determine where the
-read sets and write sets are implemented in the Intel x86 and IBM PowerPC
-architectures. The focus of our experiments is to explore scenarios where these
-capacity aborts are inevitable so that we know when hardware transactions are
-not a feasible synchronization solution at all, even in the case of no
-contention. These contributions will provide important insights to the limits of
-hardware transactional memory and better enable its effective utilization in
+We show in this paper the results of experiments 
+we ran to determine where the
+read sets and write sets are implemented in the 
+Intel x86 and IBM PowerPC
+architectures. The focus of our experiments is to 
+explore scenarios where these
+capacity aborts are inevitable so that we know 
+when hardware transactions are
+not a feasible synchronization solution at all, 
+even in the case of no
+contention. These contributions will provide 
+important insights to the limits of
+hardware transactional memory and better enable 
+its effective utilization in
 future multicore programs.
  
