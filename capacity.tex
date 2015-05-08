@@ -1,67 +1,87 @@
-
 \section{Capacity Constraints}
-There are physical limitations to the size of hardware transactions that are
-governed by how they are implemented in hardware. These capacity constraints
-determine when a transaction will inevitably abort, even in the case of zero
-contention. It is thus critical to shed light on the hardware implementation of
-transactions in order to know when they are not a feasible synchronization
-solution at all.
+\label{sec:capacity}
+There are physical limitations to the size of hardware 
+transactions that are
+governed by how they are implemented in hardware. 
+These capacity constraints
+determine when a transaction will inevitably abort, 
+even in the case of zero contention. 
+Hardware transactional memory leverages existing caching 
+protocols to maintain read and write sets. We 
+devised an array access
+experiment to measure the maximum cache line capacity 
+of sequential read-only and write-only
+hardware transactions. We also experimented with strided 
+memory access patterns
+to detect whether the read and write sets are maintained
+on a per-cache line basis or a per-read / per-write basis.
+With knowledge of the maximum sequential access 
+capacity and also the maximum
+strided access capacity, we can draw conclusions 
+about where in the caching
+architecture the read and write sets are 
+maintained. 
 
-Hardware transactional memory leverages existing caching protocols to maintain
-read sets and write sets~\cite{YooHuLa13}. As such, we devised an array access
-experiment to measure the maximum cache line capacity of sequential read-only and write-only
-hardware transactions. We also experimented with strided memory access patterns
-to see how different stride amounts affect maximum possible transaction sizes.
-With knowledge of the maximum sequential access capacity and also the maximum
-strided access capacity, we can draw conclusions about where in the caching
-architecture the read sets and write sets are implemented. We report these
-results for both the Intel and IBM machines.
+\subheading{Intel}
 
-\subsection*{Intel}
-
-Figure~\ref{fig:wttm_capacity_read_intel} shows the result of a sequential
+\figref{wttm_capacity_read_intel} shows the result of a sequential
 read-only access experiment. The data points in the graphs represent the success
 probability of the transaction with respect to the number of cache lines read.
 The results indicate that a single transaction can reliably read 
-around 75000 cache lines and still commit.
+around 75,000 contiguous cache lines.
 
-Figure~\ref{fig:wttm_stride_read_intel} shows the result of a strided read-only
-access experiment. The stride amount is the number of cache lines stepped over
-per access. Each data point in the graph represents the maximum number of cache
-lines that can be reliably read with respect to the stride amount. For example,
-the third data point in the graph indicates that when the stride amount is
-$2^2=4$ cache lines stepped over per access, the transaction can reliably read
-$2^{14}=16384$ cache lines and commit. The significance of this graph is that
-the number of cache lines that can be read in a single transaction is generally
-halved as we double the stride amount, presumably because the access pattern
-keeps hitting the same few cache sets while completely skipping over other sets.
-It is important to note that the plot plateaus at $2^4=16$ cache lines.
+\figref{wttm_stride_read_intel} shows the result of a strided read-only
+access experiment. The stride amount is the number of cache lines per
+iteration (e.g. reading cache lines 1, 5, 9, 13, 17 etc. 
+indicates a stride of 4). Each data point in the graph 
+represents the maximum number of cache
+lines that can be reliably read with respect 
+to the stride amount. For example,
+the third data point in the graph indicates 
+that when the stride amount is
+$2^2$ ($=4$) cache lines stepped over per access, 
+the transaction can reliably read
+$2^{14}$ ($=16,384$) cache lines and commit. 
+The significance of this graph is that
+the number of cache lines that can be read in a 
+single transaction is generally
+halved as we double the stride amount, presumably 
+because the access pattern
+keeps hitting the same few cache sets while 
+completely skipping over other sets.
+It is important to note that the plot plateaus 
+at $2^4$ ($=16$) cache lines, which is not-coincidentally
+the associativity of the L3 cache.
 
-Figure~\ref{fig:wttm_capacity_read_intel} and
-Figure~\ref{fig:wttm_stride_read_intel} show experimental results that indicate
-that the read set is very closely related to, if not directly stored inside, the
-\textit{L3} cache. The \textit{L3} cache of this Intel machine has a maximum
+\figreftwo{wttm_capacity_read_intel}{wttm_stride_read_intel} show experimental results that indicate
+that the read set is maintained in the
+{L3} cache. The {L3} cache of this Intel machine has a maximum
 capacity of $2^{17}$ cache lines, which explains why read-only transactions
-cannot fit much more than $2^{16}=65536$ cache lines because it is impossible
-for the whole read set to fit perfectly into the \textit{L3}. The minimum of 16
+cannot fit much more than $2^{16}$ ($=65,536$) cache lines because it is impossible
+for the whole read set to fit perfectly into the {L3}. The minimum of 16
 cache lines readable when the stride amounts are large enough to consecutively
 hit the same cache set further supports the notion that the read set is
-maintained through the \textit{L3} because this value exactly coincides with the
-set associativity of the \textit{L3}, which is 16 cache lines.
+maintained through the {L3} because this value exactly coincides with the
+set associativity of the {L3}, which is 16 cache lines.
 
-Figure~\ref{fig:wttm_capacity_write_intel} illustrates the result of an
-identical array access experiment, except now the transactions are write-only
-instead of read-only. A single write-only transaction can reliably commit about
-400 cache lines.
+We also conducted symmetric experiments for write-only accesses
+patterns.  \figref{wttm_capacity_write_intel} illustrates 
+the result of an
+identical array access experiment, except now the 
+transactions are write-only
+instead of read-only. A single write-only transaction 
+can reliably commit about 400 cache lines.
 
-Figure~\ref{fig:wttm_stride_write_intel} illustrates that the number of cache
-lines that can be written in a single transaction is also generally halved as we
+\figref{wttm_stride_write_intel} illustrates that the number of cache
+lines that can be written in a single transaction 
+is also generally halved as we
 double the stride amount, but even as we increase the stride amount
-significantly, the number of cache lines that a transaction can reliably write
+significantly, the number of cache lines that a 
+transaction can reliably write
 to does not fall below 8.
 
-The evidence from Figure~\ref{fig:wttm_capacity_write_intel} and
-Figure~\ref{fig:wttm_stride_write_intel} suggests that the write set is very
+The evidence from \figref{wttm_capacity_write_intel} and
+\figref{wttm_stride_write_intel} suggests that the write set is very
 closely related to, if not directly stored inside, the \textit{L1} cache. The
 size of the \textit{L1} cache is 512 cache lines, and it makes sense that the
 write set can only reach about 400 cache lines because it cannot possibly fit
@@ -71,36 +91,20 @@ to for large strided access patterns that hit the same cache set.
 
 \begin{figure}[]%[ht!]
 \centering
-\figuretitle{Cache Lines Read vs Success Probability}
-\includegraphics[width=\linewidth]{images/wttm_capacity_read_intel}
-\caption{The read set maximum sequential access capacity on the Intel machine is
-around 75,000 cache lines}
-\label{fig:wttm_capacity_read_intel}
-\end{figure}
-
-\begin{figure}[]%[ht!]
-\centering
-\figuretitle{Stride Amount vs Cache Lines Readable}
+%\figuretitle{Stride Amount vs Cache Lines Readable}
 \includegraphics[width=\linewidth]{images/wttm_stride_read_intel}
-\caption{Doubling the stride amount halves the size of successful read-only
+\caption{Stride Amount vs Cache Lines Readable. Doubling the stride amount halves the size of successful read-only
 transactions to a minimum of 16 on the Intel machine}
 \label{fig:wttm_stride_read_intel}
 \end{figure}
 
-\begin{figure}[]%[ht!]
-\centering
-\figuretitle{Cache Lines Written vs Success Probability}
-\includegraphics[width=\linewidth]{images/wttm_capacity_write_intel}
-\caption{The write set maximum sequential access capacity on the Intel machine is
-around 400 cache lines}
-\label{fig:wttm_capacity_write_intel}
-\end{figure}
 
 \begin{figure}[]%[ht!]
 \centering
-\figuretitle{Stride Amount vs Cache Lines Writable}
+%\figuretitle{Stride Amount vs Cache Lines Writable}
 \includegraphics[width=100mm]{images/wttm_stride_write_intel}
-\caption{Doubling the stride amount halves the size of successful write-only
+\caption{Stride Amount vs Cache Lines Writable. 
+Doubling the stride amount halves the size of successful write-only
 transactions to a minimum of 8 on the Intel machine}
 \label{fig:wttm_stride_write_intel}
 \end{figure}
@@ -111,15 +115,15 @@ write set is implemented through the \textit{L1} cache on the experimental Intel
 machine, and even more generally on other Intel x86 microprocessors that support
 hardware transactional memory.
 
-\subsection*{IBM}
+\subheading{IBM}
 
-Figure~\ref{fig:wttm_capacity_readwrite_ibm} shows that the maximum number of
+\figref{wttm_capacity_readwrite_ibm} shows that the maximum number of
 cache lines that can be read or written in a single hardware transaction on the
 IBM machine is very clearly 63 cache lines.
 
 The results of our strided access experiment for both read-only and write-only
 transactions appear to be identical in
-Figure~\ref{fig:wttm_stride_readwrite_ibm}; the
+\figref{wttm_stride_readwrite_ibm}; the
 doubling-stride-amount-halving-transaction-size effect is still observed and a
 minimum of 16 cache lines can be read or written in a single transaction.
 
@@ -136,27 +140,30 @@ for a total of 64 cache lines.
 
 \begin{figure}[]%[ht!]
 \centering
-\figuretitle{Cache Lines Read/Written vs Success Probability}
+%\figuretitle{Cache Lines Read/Written vs Success Probability}
 \includegraphics[width=\linewidth]{images/wttm_capacity_readwrite_ibm}
-\caption{The read set and write set maximum sequential access capacity on the
+\caption{Cache Lines Read/Written vs Success Probability. 
+The read set and write set maximum sequential access capacity on the
 IBM machine is 63 cache lines}
 \label{fig:wttm_capacity_readwrite_ibm}
 \end{figure}
 
 \begin{figure}[]%[ht!]
 \centering
-\figuretitle{Stride Amount vs Cache Lines Readable/Writeable}
+%\figuretitle{Stride Amount vs Cache Lines Readable/Writeable}
 \includegraphics[width=100mm]{images/wttm_stride_readwrite_ibm}
-\caption{Doubling the stride amount halves the size of successful read-only and
+\caption{Stride Amount vs Cache Lines Readable/Writeable. 
+Doubling the stride amount halves the size of successful read-only and
 write-only transactions to a minimum of 16 on the IBM machine}
 \label{fig:wttm_stride_readwrite_ibm}
 \end{figure}
 
 \begin{figure}[]%[ht!]
 \centering
-\figuretitle{Num Threads vs Committed Transactions}
+%\figuretitle{Number of Threads vs Committed Transactions}
 \includegraphics[width=\linewidth]{images/wttm_core_or_thread_ibm}
-\caption{Aggregate committed transactions increases with the number of threads
+\caption{Number of Threads vs Committed Transactions. 
+Aggregate committed transactions increases with the number of threads
 while average committed transactions remains constant, suggesting that there is
 a dedicated cache per core on the IBM machine}
 \label{fig:wttm_core_or_thread_ibm}
@@ -172,7 +179,7 @@ transaction size of 40 cache lines is designed to sufficiently fill up the
 dedicated caches per transaction to induce capacity aborts in the case of shared
 caches.
 
-We see in Figure~\ref{fig:wttm_core_or_thread_ibm} compelling reason to believe that
+We see in \figref{wttm_core_or_thread_ibm} compelling reason to believe that
 there are 80 dedicated caches, one for each hardware thread. Each spawned
 software thread is pinned to a unique hardware thread in round robin fashion
 such that the distribution is even across the 10 cores. If all 8 of the
