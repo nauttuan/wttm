@@ -12,7 +12,7 @@ or phrase.
 \end{itemize}
 
 
-As Moore's law plateaus~\cite{???} the transition
+As Moore's law plateaus~\cite{Vardi14} the transition
 to multicore microprocessors is in full swing. High-performing concurrent
 programs require the effective utilization of these multicore chips, but 
 synchronization overhead and complexity has been a
@@ -20,25 +20,25 @@ major roadblock to building fast concurrent programs.
 Transactional memory~\cite{HerlihyMo93} was originally
 proposed as a programming abstraction that could achieve
 high performance while maintaining the simplicity of 
-coarse-grained locks~\cite{???}.
-Recently, Intel~\cite{???} and IBM~\cite{???} 
+coarse-grained locks~\cite{YooHuLa13}.
+Recently, Intel and IBM
 have both introduced mainstream 
 multicores supporting restricted \defn{hardware
 transactional memory} (HTM)\footnote{The Intel and IBM
 systems are both \emph{restricted} in that they are 
 a \emph{best effort} hardware transactional
-memory system~\cite{???}.  This means that there is no 
+memory system~\cite{YooHuLa13}.  This means that there is no 
 guarantee that an attempted
 transaction will complete successfully, even in the absence 
 of contention from other cores, due to hardware restrictions
-arising from the imperfect implementation.}~\cite{???}
+arising from the imperfect implementation.}~\cite{Reinders12}~\cite{LeGuWi15}
 and a new ingredient in the solution 
 to the synchronization problem is
 on the horizon. Hardware transactions are faster than traditional
-coarse-grained locks and software transactions~\cite{???}, 
+coarse-grained locks and software transactions~\cite{YooHuLa13}, 
 yet they have similar performance to well-engineered software
 using fine-grained locks and atomic instructions (e.g.
-\proc{compare-and-swap}~\cite{???})~\cite{???}. 
+\proc{compare-and-swap}~\cite{Herlihy91})~\cite{YooHuLa13}. 
 However, \emph{restricted} HTM introduces a wrinkle into 
 this otherwise panacean technology: sometimes transactions
 will fail even when executed serially due to limitations
@@ -53,7 +53,7 @@ maintenance of \defn{read sets}, the set
 of memory locations that are read within a 
 transaction, and \defn{write sets}, the set
 of memory locations that are written within 
-a transaction~\cite{???}. When transactions execute, 
+a transaction~\cite{HerlihyMo93}. When transactions execute, 
 local reads and writes to memory 
 are tracked and recorded in
 corresponding read sets and write sets. Upon 

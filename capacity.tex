@@ -8,8 +8,8 @@ transactions in order to know when they are not a feasible synchronization
 solution at all.
 
 Hardware transactional memory leverages existing caching protocols to maintain
-read sets and write sets. As such, we devised an array access experiment to
-measure the maximum cache line capacity of sequential read-only and write-only
+read sets and write sets~\cite{YooHuLa13}. As such, we devised an array access
+experiment to measure the maximum cache line capacity of sequential read-only and write-only
 hardware transactions. We also experimented with strided memory access patterns
 to see how different stride amounts affect maximum possible transaction sizes.
 With knowledge of the maximum sequential access capacity and also the maximum
@@ -23,7 +23,7 @@ Figure~\ref{fig:wttm_capacity_read_intel} shows the result of a sequential
 read-only access experiment. The data points in the graphs represent the success
 probability of the transaction with respect to the number of cache lines read.
 The results indicate that a single transaction can reliably read 
-around 75000 cache lines and still commit..
+around 75000 cache lines and still commit.
 
 Figure~\ref{fig:wttm_stride_read_intel} shows the result of a strided read-only
 access experiment. The stride amount is the number of cache lines stepped over
@@ -119,9 +119,9 @@ IBM machine is very clearly 63 cache lines.
 
 The results of our strided access experiment for both read-only and write-only
 transactions appear to be identical in
-Figure~\ref{fig:wttm_stride_readwrite_ibm}; the doubling-stride-amount
-$\rightarrow$ halving-transaction-size effect is still observed and a minimum of
-16 cache lines can be read or written in a single transaction.
+Figure~\ref{fig:wttm_stride_readwrite_ibm}; the
+doubling-stride-amount-halving-transaction-size effect is still observed and a
+minimum of 16 cache lines can be read or written in a single transaction.
 
 The maximum observed hardware transaction size of 63 on this machine is far too
 small to be attributed to even the \textit{L1} cache, which holds 512 cache

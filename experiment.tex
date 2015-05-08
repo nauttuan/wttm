@@ -1,33 +1,17 @@
 \section{Experimental Setup}
-\wchnote{Every section and subsection and subsubsection etc. gets its
-own topic paragraph.}
-\subsection{Hardware Specifications}
 The results from our experiments should only be fully accepted with respect to
 the microprocessors we specify in this section, although the conclusions will
-generally apply to different generations of the hardware.
+generally apply to different generations of the hardware. 
 
-The Intel experimental machine contains a Haswell i7-4770 processor with
+The Intel experimental machine contains a Haswell i7-4770 processor with 4
+3.40GHz cores, 4 total hardware threads, 64 byte wide cache lines, an 8MB
+shared 16-way \textit{L3} cache, and 32KB per-core 8-way \textit{L1} caches.
 
-\begin{spacing}{0}
-\begin{itemize}
-\item 4 3.40GHz cores; 4 total hardware threads
-\item 64 byte wide cache lines
-\item 8mB shared 16-way \textit{L3} cache
-\item 32kB per-core 8-way \textit{L1} cache
-\end{itemize}
+The IBM experimental machine contains a Power8 processor with 10 3.425GHz cores,
+80 total hardware threads, 128 byte wide cache lines, an 80MB shared 8-way
+\textit{L3} cache (roughly 8mB per-core), and 64KB per-core 8-way \textit{L1}
+caches.
 
-The IBM experimental machine contains a Power8 processor with
-\begin{itemize}
-\item 10 3.425GHz cores; 80 total hardware threads
-\item 128 byte wide cache lines
-\item 80mB shared 8-way \textit{L3} cache (roughly 8mB per-core)
-\item 64kB per-core 8-way \textit{L1} cache
-%http://www.7-cpu.com/cpu/Power8.html
-%https://books.google.com/books?id=LIhFBAAAQBAJ&pg=PA36&lpg=PA36&dq=ibm+power8+cache+associativity&source=bl&ots=h7WlkWlmYD&sig=w0gxYk9H2-BkKEeUgnnLgS0oWC0&hl=en&sa=X&ei=ibm1VJznOYOigwSctoKoAQ&ved=0CEgQ6AEwBQ#v=onepage&q=ibm%20power8%20cache%20associativity&f=false
-\end{itemize}
-\end{spacing}
-
-\subsection{Hardware Transactional Memory Interface}
 All experiments are written in C and compiled with GCC, optimization level
 \textit{-O0}. Our experiments use the GCC hardware transactional memory
 intrinsics interface.
