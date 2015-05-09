@@ -4,12 +4,19 @@ problem in multicore software. Before we can effectively use this new
 technology, we must first understand the physical limits of hardware
 transactions that are inherent to the Intel and IBM microprocessors on which
 they are implemented. Our capacity constraint benchmarks revealed that the read
-sets are implemented through the \textit{L3} and the write sets are implemented
-through the \textit{L1} on the Intel machine; on the other hand, there is a
-per-core, 4-set, 16-way dedicated cache that maintains the read and write sets
-on the IBM machine. SNARF INSERT SOME DISCUSSION/IMPLICATION/REVELATION, like how IBM
-is not useful for sufficiently large transactions. We anticipate that these
-findings will move us in the right direction to better understanding hardware
-transactional memory, ultimately enabling its proliferation into future
-concurrent programs.
+sets are implemented through the {L3} and the write sets are implemented through
+the {L1} on the Intel machine; on the other hand, there is a
+per-hardware-thread, 4-set, 16-way dedicated cache that maintains the read and
+write sets on the IBM machine.
+
+Developers using HTM on Intel's Haswell microprocessors have a lot of
+flexibility with hardware transaction size, but they should be wary of how the
+caching behavior of non-transactional code might affect HTM performance.
+Practitioners on IBM's PowerPC microprocessors should be cautious of the tight
+restriction on transaction size, but fortunately they only need to reason about
+HTM performance within the scope of a single hardware thread.
+
+We anticipate that these findings will move us in the right direction to better
+understanding hardware transactional memory, ultimately enabling its
+proliferation into future concurrent programs.
  
