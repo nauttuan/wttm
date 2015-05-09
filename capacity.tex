@@ -51,7 +51,7 @@ keeps hitting the same few cache sets while
 completely skipping over other sets.
 It is important to note that the plot plateaus 
 at $2^4$ ($=16$) cache lines, which is not-coincidentally
-the associativity of the L3 cache.
+the associativity of the {L3} cache.
 
 \figreftwo{wttm_capacity_read_intel}{wttm_stride_read_intel} show experimental results that indicate
 that the read set is maintained in the
@@ -82,10 +82,10 @@ to does not fall below 8.
 
 The evidence from \figref{wttm_capacity_write_intel} and
 \figref{wttm_stride_write_intel} suggests that the write set is very
-closely related to, if not directly stored inside, the \textit{L1} cache. The
-size of the \textit{L1} cache is 512 cache lines, and it makes sense that the
+closely related to, if not directly stored inside, the {L1} cache. The
+size of the {L1} cache is 512 cache lines, and it makes sense that the
 write set can only reach about 400 cache lines because it cannot possibly fit
-exactly into the \textit{L1}. The associativity of the \textit{L1} is 8, and
+exactly into the {L1}. The associativity of the {L1} is 8, and
 this number coincides with the number of cache lines that can still be written
 to for large strided access patterns that hit the same cache set.
 
@@ -110,8 +110,8 @@ transactions to a minimum of 8 on the Intel machine}
 \end{figure}
 
 Judging from the results of our capacity constraint experiments, it is likely
-the case that the read set is implemented through the \textit{L3} cache and the
-write set is implemented through the \textit{L1} cache on the experimental Intel
+the case that the read set is implemented through the {L3} cache and the
+write set is implemented through the {L1} cache on the experimental Intel
 machine, and even more generally on other Intel x86 microprocessors that support
 hardware transactional memory.
 
@@ -128,7 +128,7 @@ doubling-stride-amount-halving-transaction-size effect is still observed and a
 minimum of 16 cache lines can be read or written in a single transaction.
 
 The maximum observed hardware transaction size of 63 on this machine is far too
-small to be attributed to even the \textit{L1} cache, which holds 512 cache
+small to be attributed to even the {L1} cache, which holds 512 cache
 lines. The identical measurements between the read set and write set found in
 Figures~\ref{fig:wttm_capacity_readwrite_ibm}
 and~\ref{fig:wttm_stride_readwrite_ibm} suggest that there is little distinction
