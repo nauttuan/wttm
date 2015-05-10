@@ -20,32 +20,40 @@ about where in the caching
 architecture the read and write sets are 
 maintained. 
 
-\subheading{Intel}
+\paragraph{Intel}
 
 In this section, we experimentally support the hypothesis
 that the Intel HTM implementation uses the L1 cache to 
 store write sets and the L3 cache to store read sets.
 
-\begin{figure}[H]%[ht!]
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{.45\linewidth}
+%\begin{figure}[h]%[ht!]
 \centering
 %\figuretitle{Stride Amount vs Cache Lines Readable}
 \includegraphics[width=\linewidth]{images/wttm_stride_read_intel}
-\caption{Stride Amount vs Cache Lines Readable. Doubling the stride amount halves the size of successful read-only
-transactions to a minimum of 16 on the Intel machine}
+\caption{Stride Amount vs Cache Lines Readable. 
+%Doubling the stride amount halves the size of successful read-only
+%transactions to a minimum of 16 on the Intel machine
+}
 \label{fig:wttm_stride_read_intel}
-\end{figure}
-
-
-\begin{figure}[H]%[ht!]
+%\end{figure}
+\end{minipage}%
+\quad
+\begin{minipage}[b]{.45\linewidth}
+%\begin{figure}[h]%[ht!]
 \centering
 %\figuretitle{Stride Amount vs Cache Lines Writable}
-\includegraphics[width=10cm]{images/wttm_stride_write_intel}
+\includegraphics[width=\linewidth]{images/wttm_stride_write_intel}
 \caption{Stride Amount vs Cache Lines Writable. 
-Doubling the stride amount halves the size of successful write-only
-transactions to a minimum of 8 on the Intel machine}
+%Doubling the stride amount halves the size of successful write-only
+%transactions to a minimum of 8 on the Intel machine
+}
 \label{fig:wttm_stride_write_intel}
+%\end{figure}
+\end{minipage}
 \end{figure}
-
 
 \figref{wttm_capacity_read_intel} summarizes the result of a sequential
 read-only access experiment. The data points in the graphs represent the success
@@ -106,92 +114,116 @@ head of the program stack).
 \figref{wttm_stride_write_intel} illustrates that the number of cache
 lines that can be written in a single transaction 
 is also generally halved as we
-double the stride amount, but even as we increase the stride amount
+double the stride amount.  However, even as we increase the stride amount
 significantly, the number of cache lines that a 
 transaction can reliably write
 to does not fall below 8, corresponding to the associativity 
 of the L1 cache.  This suggests that, at worst, one is limited 
 to storing all writes in a single, but entire, set of the L1 cache.
 
-\subheading{IBM}
+\paragraph{IBM}
 
 In this section, we experimentally support the hypothesis
 that the IBM HTM implementation uses a dedicated structure
-to store read and write sets, choosing not to extend the 
+to maintain read and write sets, choosing not to extend the 
 functionality of the existing cache structures as with
-the Intel implementation.
+the Intel implementation.  In addition, we observe
+that the dedicated structures used for read and write set
+maintenance is not shared among the 8 threads per core, but rather
+each thread is allocated its own.
 
-The results of our strided access experiment for 
-both read-only and write-only
-transactions appear to be identical in
-\figref{wttm_stride_readwrite_ibm}; the
-doubling-stride-amount-halving-transaction-size 
-effect is still observed and a
-minimum of 16 cache lines can be read or written in a single transaction.
-
-The maximum observed hardware transaction size of 
-63 shown in \figref{wttm_capacity_readwrite_ibm} is far too
-small to be attributed to even the {L1} cache, which holds 512 cache
-lines. The identical measurements between the read and write set 
-found in 
-\figreftwo{wttm_capacity_readwrite_ibm}{wttm_stride_readwrite_ibm} suggest that there is little distinction
-between the handling of reads and writes in a transaction on the IBM machine.
-From these results, we conclude that there are dedicated caches for transactions
-on the IBM machine and, more generally, for the PowerPC architecture. The
-dedicated caches likely each have 4 cache sets and a set associativity of 16,
-for a total of 64 cache lines.
-
-\begin{figure}[]%[ht!]
+\begin{figure}[h]%[ht!]
+\centering
+\begin{minipage}[b]{.45\linewidth}
 \centering
 %\figuretitle{Cache Lines Read/Written vs Success Probability}
 \includegraphics[width=\linewidth]{images/wttm_capacity_readwrite_ibm}
 \caption{Cache Lines Read/Written vs Success Probability. 
-The read set and write set maximum sequential access capacity on the
-IBM machine is 63 cache lines}
+%The read set and write set maximum sequential access capacity on the
+%IBM machine is 63 cache lines
+}
 \label{fig:wttm_capacity_readwrite_ibm}
-\end{figure}
-
-\begin{figure}[]%[ht!]
+\end{minipage}%
+\quad
+\begin{minipage}[b]{.45\linewidth}%[ht!]
 \centering
 %\figuretitle{Stride Amount vs Cache Lines Readable/Writeable}
-\includegraphics[width=100mm]{images/wttm_stride_readwrite_ibm}
+\includegraphics[width=\linewidth]{images/wttm_stride_readwrite_ibm}
 \caption{Stride Amount vs Cache Lines Readable/Writeable. 
-Doubling the stride amount halves the size of successful read-only and
-write-only transactions to a minimum of 16 on the IBM machine}
+%Doubling the stride amount halves the size of successful read-only and
+%write-only transactions to a minimum of 16 on the IBM machine
+}
 \label{fig:wttm_stride_readwrite_ibm}
+\end{minipage}
 \end{figure}
 
-\begin{figure}[]%[ht!]
+
+The results of our strided access experiment for 
+both read-only and write-only
+transactions appear to be identical in
+\figref{wttm_stride_readwrite_ibm}, where
+the maximum number of reads or writes in a transaction
+is 64 and that the maximum transaction size 
+halves as we double the stride amount with a minimum
+of 16.  The maximum observed hardware transaction size is far too
+small to be attributable to even the {L1} cache, which holds 512 cache
+lines.   Thus, we conclude that there are dedicated caches 
+for transactions in the IBM implementation, and that
+these caches likely each have 4 sets and an associativity of 16.
+
+A natural next question is whether this IBM machine 
+has 10 dedicated caches that
+are spread across each core, or if there are 80 
+dedicated caches that are spread
+across each hardware thread. To determine the 
+difference, we experimented and
+measured the number of successful write-only 
+transactions that concurrently
+running threads were able to complete. Each 
+thread makes 10000 transaction
+attempts to write 40 thread-local padded cache 
+lines and then commit. The
+transaction size of 40 cache lines is designed 
+to sufficiently fill up the
+dedicated caches per transaction to induce capacity 
+aborts in the case of shared
+caches.
+
+\begin{figure}[H]%[ht!]
 \centering
 %\figuretitle{Number of Threads vs Committed Transactions}
 \includegraphics[width=\linewidth]{images/wttm_core_or_thread_ibm}
 \caption{Number of Threads vs Committed Transactions. 
-Aggregate committed transactions increases with the number of threads
-while average committed transactions remains constant, suggesting that there is
-a dedicated cache per core on the IBM machine}
+%Aggregate committed transactions increases with the number of threads
+%while average committed transactions remains constant, 
+%suggesting that there is
+%a dedicated cache per core on the IBM machine
+}
 \label{fig:wttm_core_or_thread_ibm}
 \end{figure}
 
-A natural next question is whether this IBM machine has 10 dedicated caches that
-are spread across each core, or if there are 80 dedicated caches that are spread
-across each hardware thread. To determine the difference, we experimented and
-measured the number of successful write-only transactions that concurrently
-running threads were able to complete. Each thread makes 10000 transaction
-attempts to write 40 thread-local padded cache lines and then commit. The
-transaction size of 40 cache lines is designed to sufficiently fill up the
-dedicated caches per transaction to induce capacity aborts in the case of shared
-caches.
 
-We see in \figref{wttm_core_or_thread_ibm} compelling reason to believe that
-there are 80 dedicated caches, one for each hardware thread. Each spawned
-software thread is pinned to a unique hardware thread in round robin fashion
-such that the distribution is even across the 10 cores. If all 8 of the
-hardware threads on a single core share a single dedicated cache, we would
-expect to see sublinear speedup, perhaps even degraded performance, as we spawn
-more running threads and assign them to the same core. Instead, we observe a
-linear increase in the aggregate number of successfully committed transactions,
-while the average per-thread number of successful transactions is constant.
-Although the general 45\% success rate suggests some level of contention between
-the running threads, it is most likely not due to per-core sharing of a
+We see in \figref{wttm_core_or_thread_ibm} compelling 
+reason to believe that
+there are 80 dedicated caches, one for each hardware 
+thread. Each spawned
+software thread is pinned to a unique hardware thread 
+in round robin fashion
+such that the distribution is even across the 10 cores. 
+If all 8 of the
+hardware threads on a single core share a single 
+dedicated cache, we would
+expect to see sublinear speedup, perhaps even degraded 
+performance, as we spawn
+more running threads and assign them to the same core. 
+Instead, we observe a
+linear increase in the aggregate number of successfully 
+committed transactions,
+while the average per-thread number of successful 
+transactions is constant.
+Although the general 45\% success rate suggests some 
+level of contention between
+the running threads, it is most likely not due to 
+per-core sharing of a
 dedicated cache.
  

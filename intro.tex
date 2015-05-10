@@ -26,35 +26,58 @@ coarse-grained locks~\cite{YooHuLa13}.
 Recently, Intel~\cite{Reinders12,IntelISAX12} and
 IBM~\cite{CainMiFr13,Merritt11,IBMPower8Overview14} have both
 introduced mainstream multicores supporting restricted \defn{hardware
-transactional memory} (HTM)\footnote{The Intel and IBM
+transactional memory} (HTM) and a new ingredient in the solution 
+to the synchronization problem is on the horizon. The Intel and IBM
 systems are both \emph{restricted} in that they are 
 a \emph{best effort} hardware transactional memory
-system~\cite{Roman12,IntelISAX12}~\cite{CainMiFr13,IBMPower8Optimization14}.
-This means that there is no guarantee that an attempted transaction will complete successfully, even in the absence 
-of contention from other cores, due to hardware restrictions
-arising from the imperfect implementation.}
-and a new ingredient in the solution 
-to the synchronization problem is
-on the horizon. Hardware transactions are faster than traditional
+system~\cite{Roman12,IntelISAX12,CainMiFr13,IBMPower8Optimization14}.
+This means that there is no guarantee that an attempted 
+transaction will complete successfully, even in the absence 
+of memory contention from other cores, due to hardware restrictions
+arising from the imperfect implementation.  
+Hardware transactions are faster than traditional
 coarse-grained locks and software
-transactions~\cite{YooHuLa13}~\cite{CascavalBlMi08}, yet they have similar
-performance to well-engineered software using fine-grained locks and atomic instructions (e.g.
+transactions~\cite{YooHuLa13}~\cite{CascavalBlMi08}, 
+yet they have similar
+performance to well-engineered software using fine-grained 
+locks and atomic instructions (e.g.
 \proc{compare-and-swap}~\cite{Herlihy91})~\cite{YooHuLa13}. 
 However, \emph{restricted} HTM introduces a wrinkle into 
 this otherwise panacean technology: sometimes transactions
 will fail even when executed serially due to limitations
 of the underlying hardware implementation.  The conditions
 under which such a failure may occur dramatically impacts
-whether the complexity of designing a software system using restricted HTM
+whether the complexity of designing a software 
+system using restricted HTM
 is justified by the expected performance.  Characterizing
 these conditions is the goal of this paper. 
 
-\begin{figure}[H]%[ht!]
+\begin{figure}[h]%[ht!]
 \centering
-\includegraphics[width=.45\linewidth]{images/wttm_capacity_read_intel}
-\caption{Cache Lines Read vs Success Probability. The read set maximum
-sequential access capacity on the Intel machine is around 75,000 cache lines}
+\begin{minipage}[b]{.45\linewidth}
+\centering
+%\figuretitle{Cache Lines Read vs Success Probability}
+\includegraphics[width=\linewidth]{images/wttm_capacity_read_intel}
+\caption{Lines Read vs Success Probability. 
+%The read set maximum sequential access capacity on the 
+%Intel machine is
+%around 75,000 cache lines
+}
 \label{fig:wttm_capacity_read_intel}
+%\end{figure}
+\end{minipage}%
+\quad
+\begin{minipage}[b]{.45\linewidth}
+%\begin{figure}[H]%[ht!]
+\centering
+%\figuretitle{Cache Lines Written vs Success Probability}
+\includegraphics[width=\linewidth]{images/wttm_capacity_write_intel}
+\caption{Lines Written vs Success Probability. 
+%The write set maximum sequential access capacity on the Intel machine is
+%around 400 cache lines
+}
+\label{fig:wttm_capacity_write_intel}
+\end{minipage}
 \end{figure}
 
 Transactions require the logical 
@@ -72,15 +95,6 @@ consistency before the transaction
 memory are visible to other threads.
 
 
-\begin{figure}[H]%[ht!]
-\centering
-\includegraphics[width=.45\linewidth]{images/wttm_capacity_write_intel}
-\caption{Cache Lines Written vs Success Probability. 
-The write set maximum sequential access capacity on the Intel machine is
-around 400 cache lines}
-\label{fig:wttm_capacity_write_intel}
-\end{figure}
-
 Transactions may \defn{abort} due to a conflict with
 another concurrently executing transaction when an
 inconsistent memory state is detected, 
@@ -94,8 +108,7 @@ from \textit{capacity aborts} when the underlying hardware
 lacks sufficient resources to maintain the
 read or write set.
 
-\subheading{Experimental Setup}
-
+\paragraph{Experimental Setup}
 In this paper we summarize results of experiments 
 that determine how the
 read and write sets are maintained in hardware for recent 
@@ -110,10 +123,12 @@ shared L3 cache, and 64KB per-core 8-way L1 caches.
 All experiments are written in C and compiled with GCC, 
 optimization level
 \texttt{-O0}.\footnote{We compiled with \texttt{-O0} because
-we found that higher optimization levels sometimes caused spurious transaction
+we found that higher optimization levels sometimes 
+caused spurious transaction
 aborts, thus confounding our results.} Our experiments use the GCC
 hardware transactional memory intrinsics interface.\footnote{The x86
-intrinsics are \texttt{\_xbegin} and \texttt{\_xend}; the PowerPC intrinsics are
+intrinsics are \texttt{\_xbegin} and \texttt{\_xend}; 
+the PowerPC intrinsics are
 \texttt{\_\_builtin\_tbegin} and \texttt{\_\_builtin\_tend}.}
 
 The focus of our experiments is to explore scenarios where these
