@@ -168,8 +168,10 @@ halves as we double the stride amount with a minimum
 of 16.  The maximum observed hardware transaction size is far too
 small to be attributable to even the {L1} cache, which holds 512 cache
 lines.   Thus, we conclude that there are dedicated caches 
-for transactions in the IBM implementation, and that
+for transactions in the IBM implementation independent
+of the standard core caches, and that
 these caches likely each have 4 sets and an associativity of 16.
+
 
 A natural next question is whether this IBM machine 
 has 10 dedicated caches that
