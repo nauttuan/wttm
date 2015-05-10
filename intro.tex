@@ -56,31 +56,18 @@ these conditions is the goal of this paper.
 \centering
 \begin{minipage}[b]{.45\linewidth}
 \centering
-%\figuretitle{Cache Lines Read vs Success Probability}
 \includegraphics[width=\linewidth]{images/wttm_capacity_read_intel}
-\caption{Lines Read vs Success Probability. 
-%The read set maximum sequential access capacity on the 
-%Intel machine is
-%around 75,000 cache lines
-}
+\caption{Lines Read vs Success Rate.}
 \label{fig:wttm_capacity_read_intel}
-%\end{figure}
 \end{minipage}%
 \quad
 \begin{minipage}[b]{.45\linewidth}
-%\begin{figure}[H]%[ht!]
 \centering
-%\figuretitle{Cache Lines Written vs Success Probability}
 \includegraphics[width=\linewidth]{images/wttm_capacity_write_intel}
-\caption{Lines Written vs Success Probability. 
-%The write set maximum sequential access capacity on the Intel machine is
-%around 400 cache lines
-}
+\caption{Lines Written vs Success Rate.}
 \label{fig:wttm_capacity_write_intel}
 \end{minipage}
 \end{figure}
-
-
 
 Transactions require the logical 
 maintenance of \defn{read sets}, the set
@@ -95,7 +82,6 @@ completion of a transaction, the memory state is validated for
 consistency before the transaction
 \defn{commits}, meaning that the modifications to 
 memory are visible to other threads.
-
 
 
 Transactions may \defn{abort} due to a conflict with

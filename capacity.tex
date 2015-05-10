@@ -29,29 +29,17 @@ store write sets and the L3 cache to store read sets.
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{.45\linewidth}
-%\begin{figure}[h]%[ht!]
 \centering
-%\figuretitle{Stride Amount vs Cache Lines Readable}
 \includegraphics[width=\linewidth]{images/wttm_stride_read_intel}
-\caption{Stride Amount vs Cache Lines Readable. 
-%Doubling the stride amount halves the size of successful read-only
-%transactions to a minimum of 16 on the Intel machine
-}
+\caption{$log_2{Stride}$ vs $log_2{Lines Readable}$.}
 \label{fig:wttm_stride_read_intel}
-%\end{figure}
 \end{minipage}%
 \quad
 \begin{minipage}[b]{.45\linewidth}
-%\begin{figure}[h]%[ht!]
 \centering
-%\figuretitle{Stride Amount vs Cache Lines Writable}
 \includegraphics[width=\linewidth]{images/wttm_stride_write_intel}
-\caption{Stride Amount vs Cache Lines Writable. 
-%Doubling the stride amount halves the size of successful write-only
-%transactions to a minimum of 8 on the Intel machine
-}
+\caption{$log_2{Stride}$ vs $log_2{Lines Writable}$.}
 \label{fig:wttm_stride_write_intel}
-%\end{figure}
 \end{minipage}
 \end{figure}
 
@@ -136,23 +124,15 @@ each thread is allocated its own.
 \centering
 \begin{minipage}[b]{.45\linewidth}
 \centering
-%\figuretitle{Cache Lines Read/Written vs Success Probability}
 \includegraphics[width=\linewidth]{images/wttm_capacity_readwrite_ibm}
-\caption{Cache Lines Read/Written vs Success Probability. 
-%The read set and write set maximum sequential access capacity on the
-%IBM machine is 63 cache lines
-}
+\caption{Lines Read/Written vs Success Rate.}
 \label{fig:wttm_capacity_readwrite_ibm}
 \end{minipage}%
 \quad
 \begin{minipage}[b]{.45\linewidth}%[ht!]
 \centering
-%\figuretitle{Stride Amount vs Cache Lines Readable/Writeable}
 \includegraphics[width=\linewidth]{images/wttm_stride_readwrite_ibm}
-\caption{Stride Amount vs Cache Lines Readable/Writeable. 
-%Doubling the stride amount halves the size of successful read-only and
-%write-only transactions to a minimum of 16 on the IBM machine
-}
+\caption{Stride vs Lines Readable/Writeable.}
 \label{fig:wttm_stride_readwrite_ibm}
 \end{minipage}
 \end{figure}
@@ -193,14 +173,8 @@ caches.
 
 \begin{figure}[H]%[ht!]
 \centering
-%\figuretitle{Number of Threads vs Committed Transactions}
 \includegraphics[width=\linewidth]{images/wttm_core_or_thread_ibm}
-\caption{Number of Threads vs Committed Transactions. 
-%Aggregate committed transactions increases with the number of threads
-%while average committed transactions remains constant, 
-%suggesting that there is
-%a dedicated cache per core on the IBM machine
-}
+\caption{Number of Threads vs Committed Transactions (Thousands).}
 \label{fig:wttm_core_or_thread_ibm}
 \end{figure}
 
