@@ -22,37 +22,44 @@ maintained.
 
 \paragraph{Intel}
 
-In this section, we experimentally support the hypothesis
-that the Intel HTM implementation uses the L1 cache to 
-store write sets and the L3 cache to store read sets.
+We experimentally support the hypothesis
+that the Intel HTM implementation uses the L3 cache to 
+store read sets and the L1 cache to store write sets.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{.45\linewidth}
 \centering
 \includegraphics[width=\linewidth]{images/wttm_stride_read_intel}
-\caption{$log_2{Stride}$ vs $log_2{Lines Readable}$.}
+\caption{$\log_2{\textrm{Stride}}$ vs $\log_2{\textrm{Lines Readable}}$.}
 \label{fig:wttm_stride_read_intel}
 \end{minipage}%
 \quad
 \begin{minipage}[b]{.45\linewidth}
 \centering
 \includegraphics[width=\linewidth]{images/wttm_stride_write_intel}
-\caption{$log_2{Stride}$ vs $log_2{Lines Writable}$.}
+\caption{$\log_2{\textrm{Stride}}$ vs $\log_2{\textrm{Lines Writable}}$.}
 \label{fig:wttm_stride_write_intel}
 \end{minipage}
 \end{figure}
 
 \figref{wttm_capacity_read_intel} summarizes the result of a sequential
-read-only access experiment. The data points in the graphs represent the success
-probability of the transaction with respect to the number of cache lines read.
-The results indicate that a single transaction can reliably read 
-around 75,000 contiguous cache lines.
+read-only access experiment where data points represent the success
+probability of the transaction with respect to the 
+number of cache lines read.  We see that a 
+single transaction can reliably read 
+around 75,000 contiguous cache lines. 
+The {L3} cache of the Intel machine has a maximum
+capacity of $2^{17}$ ($=131,072$) cache lines and it is unlikely
+for much more than half of the total capacity to 
+fit perfectly into the {L3} due to
+the hash function mapping physical address to L3 cache bank. 
 
 \figref{wttm_stride_read_intel} shows the result of a strided read-only
-access experiment. The stride amount is the number of cache lines per
+access experiment. The stride amount indicates 
+the number of cache lines per
 iteration (e.g. reading cache lines 1, 5, 9, 13, 17 etc. 
-indicates a stride of 4). Each data point in the graph 
+indicates a stride of 4) and each data point 
 represents the maximum number of cache
 lines that can be reliably read with respect 
 to the stride amount. For example,
@@ -61,13 +68,13 @@ that when the stride amount is
 $2^2$ ($=4$) (e.g. accessing every fourth cache line), 
 the transaction can reliably read
 $2^{14}$ ($=16,384$) cache lines and commit. 
-The significance of this graph is that
+We can see that
 the number of cache lines that can be read in a 
 single transaction is generally
 halved as we double the stride amount, presumably 
 because the access pattern
-accesses the same few cache sets while 
-completely skipping over other sets.
+accesses progressively fewer cache sets while 
+completely skipping over the other sets.
 It is important to note that the plot plateaus 
 at $2^4$ ($=16$) cache lines, which is not-coincidentally
 the associativity of the {L3} cache.
@@ -203,3 +210,6 @@ the running threads, it is most likely not due to
 per-core sharing of a
 dedicated cache.
  
+
+
+
