@@ -9,7 +9,7 @@ problem in multicore software due to its simple semantics and superior performan
 relative to coarse-grained locks.
 Hardware transactions offer a performance advantage
 over software implementations by harnessing the power
-of existing cache-coherence mechanisms which are already
+of existing cache coherence mechanisms which are already
 fast, automatic, and parallel. 
 The source of superior performance, however, is also the root of their
 weakness: existing implementations of hardware transactions 
@@ -21,7 +21,7 @@ it is necessary to first investigate the physical capacity
 constraints of hardware transactions to inform the design
 of such data structures.
 We were able to divine details of the HTM implementation
-of Intel's Haswell and IBM's PowerPC architectures from 
+of Intel's Haswell and IBM's Power8 architectures from 
 our investigation of the capacity constraints and these 
 characterizations provide much needed understanding of the
 systems for which practitioners design algorithms and 

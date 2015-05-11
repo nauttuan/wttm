@@ -1,22 +1,30 @@
 \section{Conclusion}
-Hardware transactional memory is an exciting new solution to the synchronization
-problem in multicore software. Before we can effectively use this new
-technology, we must first understand the physical limits of hardware
-transactions that are inherent to the Intel and IBM microprocessors on which
-they are implemented. Our capacity constraint benchmarks revealed that the read
-sets are implemented through the {L3} and the write sets are implemented through
-the {L1} on the Intel machine; on the other hand, there is a
-per-hardware-thread, 4-set, 16-way dedicated cache that maintains the read and
-write sets on the IBM machine.
+Hardware transactional memory is an exciting 
+new solution to the synchronization
+problem in multicore software. Before we can 
+effectively use this new
+technology, we must first understand the physical 
+limits of hardware
+transactions that are inherent to the Intel 
+and IBM microprocessors on which
+they are implemented. Our capacity constraint 
+benchmarks revealed that the read
+sets are maintained through an extension of the {L3} cache and the 
+write sets are maintained through a similar extension of
+the {L1} cache on the Intel Haswell i7-4770.  By contrast, the
+IBM Power8 appears to use a dedicated 4-set, 16-way 
+cache per hardware thread to maintain the read and
+write sets.
 
 Developers using HTM on Intel's Haswell microprocessors have a lot of
-flexibility with hardware transaction size, but they should be wary of how the
-caching behavior of non-transactional code might affect HTM performance.
-Practitioners on IBM's PowerPC microprocessors should be cautious of the tight
-restriction on transaction size, but fortunately they only need to reason about
+flexibility with hardware transaction size, but they 
+should be aware of how the
+behavior of non-transactional code sharing cache with a thread
+running transactional code
+might affect HTM performance as well as how the access 
+pattern of transactional code can limit transaction size.
+IBM's Power8 developers should be cautious of the tight
+restriction on transaction size, but fortunately they only 
+need to reason about
 HTM performance within the scope of a single hardware thread.
-
-We anticipate that these findings will move us in the right direction to better
-understanding hardware transactional memory, ultimately enabling its
-proliferation into future concurrent programs.
  

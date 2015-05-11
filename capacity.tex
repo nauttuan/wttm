@@ -21,7 +21,6 @@ architecture the read and write sets are
 maintained. 
 
 \paragraph{Intel}
-
 We experimentally support the hypothesis
 that the Intel HTM implementation uses the L3 cache to 
 store read sets and the L1 cache to store write sets.
@@ -68,32 +67,37 @@ that when the stride amount is
 $2^2$ ($=4$) (e.g. accessing every fourth cache line), 
 the transaction can reliably read
 $2^{14}$ ($=16,384$) cache lines and commit. 
-We can see that
-the number of cache lines that can be read in a 
-single transaction is generally
+We can see that the number of cache lines that can be 
+read in a single transaction is generally
 halved as we double the stride amount, presumably 
 because the access pattern
 accesses progressively fewer cache sets while 
 completely skipping over the other sets.
 It is important to note that the plot plateaus 
-at $2^4$ ($=16$) cache lines, which is not-coincidentally
-the associativity of the {L3} cache.
+at $2^4$ ($=16$) cache lines.
+When the stride amounts are large enough to consecutively
+hit the same cache set we see support for 
+the hypothesis that the read set is
+maintained in the {L3} cache since the minimum number
+of readable values never drops below 16, 
+the L3 associativity.
 
-\figreftwo{wttm_capacity_read_intel}{wttm_stride_read_intel} show experimental results that indicate
-that the read set is maintained in the
-{L3} cache. The {L3} cache of this Intel machine has a maximum
-capacity of $2^{17}$ cache lines, which explains 
-why read-only transactions
-cannot fit much more than $2^{16}$ ($=65,536$) 
-cache lines because it is unlikely
-for the whole read set to fit perfectly into the {L3} due to
-the hash function mapping physical address to L3 cache bank. 
-The minimum of 16
-cache lines readable when the stride amounts 
-are large enough to consecutively
-hit the same cache set further supports the notion that the read set is
-maintained through the {L3} because this value exactly coincides 
-with the L3 associativity.
+
+% \figreftwo{wttm_capacity_read_intel}{wttm_stride_read_intel} show experimental results that indicate
+% that the read set is maintained in the
+% {L3} cache. The {L3} cache of this Intel machine has a maximum
+% capacity of $2^{17}$ cache lines, which explains 
+% why read-only transactions
+% cannot fit much more than $2^{16}$ ($=65,536$) 
+% cache lines because it is unlikely
+% for the whole read set to fit perfectly into the {L3} due to
+% the hash function mapping physical address to L3 cache bank. 
+% The minimum of 16
+% cache lines readable when the stride amounts 
+% are large enough to consecutively
+% hit the same cache set further supports the notion that the read set is
+% maintained through the {L3} because this value exactly coincides 
+% with the L3 associativity.
 
 We also conducted similar experiments for write-only accesses
 patterns.  \figref{wttm_capacity_write_intel} illustrates 
@@ -104,7 +108,8 @@ instead of read-only. A single write-only transaction
 can reliably commit about 400 contiguous cache lines. The
 size of the {L1} cache is 512 cache lines and a transaction must also
 have sufficient space to store other program metadata (e.g. the
-head of the program stack). 
+head of the program stack), thus we would not expect to fill
+all 512 lines perfectly.
 
 \figref{wttm_stride_write_intel} illustrates that the number of cache
 lines that can be written in a single transaction 
@@ -117,15 +122,14 @@ of the L1 cache.  This suggests that, at worst, one is limited
 to storing all writes in a single, but entire, set of the L1 cache.
 
 \paragraph{IBM}
-
-In this section, we experimentally support the hypothesis
+We experimentally support the hypothesis
 that the IBM HTM implementation uses a dedicated structure
 to maintain read and write sets, choosing not to extend the 
 functionality of the existing cache structures as with
 the Intel implementation.  In addition, we observe
 that the dedicated structures used for read and write set
 maintenance is not shared among the 8 threads per core, but rather
-each thread is allocated its own.
+each thread is allocated its own copy.
 
 \begin{figure}[h]%[ht!]
 \centering
@@ -169,8 +173,8 @@ difference, we experimented and
 measured the number of successful write-only 
 transactions that concurrently
 running threads were able to complete. Each 
-thread makes 10000 transaction
-attempts to write 40 thread-local padded cache 
+thread makes 10,000 transaction
+attempts to write 40 thread-local cache 
 lines and then commit. The
 transaction size of 40 cache lines is designed 
 to sufficiently fill up the
@@ -186,18 +190,17 @@ caches.
 \end{figure}
 
 
-We see in \figref{wttm_core_or_thread_ibm} compelling 
-reason to believe that
-there are 80 dedicated caches, one for each hardware 
-thread. Each spawned
+We see in \figref{wttm_core_or_thread_ibm} 
+evidence that there are dedicated caches for each hardware 
+thread and that they are not shared among
+threads within a core. Each spawned
 software thread is pinned to a unique hardware thread 
 in round robin fashion
 such that the distribution is even across the 10 cores. 
 If all 8 of the
 hardware threads on a single core share a single 
 dedicated cache, we would
-expect to see sublinear speedup, perhaps even degraded 
-performance, as we spawn
+expect to see sublinear (or even no) speedup as we spawn
 more running threads and assign them to the same core. 
 Instead, we observe a
 linear increase in the aggregate number of successfully 
@@ -208,7 +211,8 @@ Although the general 45\% success rate suggests some
 level of contention between
 the running threads, it is most likely not due to 
 per-core sharing of a
-dedicated cache.
+dedicated cache since the addition of other threads does
+not decrease the aggregate throughput.
  
 
 
