@@ -78,10 +78,9 @@ at $2^4$ ($=16$) cache lines.
 When the stride amounts are large enough to consecutively
 hit the same cache set we see support for 
 the hypothesis that the read set is
-maintained in the {L3} cache since the minimum number
+maintained in the {L3} cache because the minimum number
 of readable values never drops below 16, 
 the L3 associativity.
-
 
 % \figreftwo{wttm_capacity_read_intel}{wttm_stride_read_intel} show experimental results that indicate
 % that the read set is maintained in the
@@ -148,10 +147,9 @@ each thread is allocated its own copy.
 \end{minipage}
 \end{figure}
 
-
-The results of our strided access experiment for 
+The results of our sequential and strided access experiments for 
 both read-only and write-only
-transactions appear to be identical in
+transactions appear to be identical in \figref{wttm_capacity_readwrite_ibm} and
 \figref{wttm_stride_readwrite_ibm}, where
 the maximum number of reads or writes in a transaction
 is 64 and that the maximum transaction size 
@@ -162,7 +160,6 @@ lines.   Thus, we conclude that there are dedicated caches
 for transactions in the IBM implementation independent
 of the standard core caches, and that
 these caches likely each have 4 sets and an associativity of 16.
-
 
 A natural next question is whether this IBM machine 
 has 10 dedicated caches that
@@ -189,7 +186,6 @@ caches.
 \label{fig:wttm_core_or_thread_ibm}
 \end{figure}
 
-
 We see in \figref{wttm_core_or_thread_ibm} 
 evidence that there are dedicated caches for each hardware 
 thread and that they are not shared among
@@ -211,7 +207,7 @@ Although the general 45\% success rate suggests some
 level of contention between
 the running threads, it is most likely not due to 
 per-core sharing of a
-dedicated cache since the addition of other threads does
+dedicated cache because the addition of other threads does
 not decrease the aggregate throughput.
  
 
