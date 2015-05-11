@@ -4,28 +4,20 @@
 % {\large \textbf{Abstract}}
 % \end{center}
 \begin{abstract}
-Hardware transactional memory (HTM) is a promising solution to the synchronization
-problem in multicore software due to its simple semantics and superior performance
-relative to coarse-grained locks.
-Hardware transactions offer a performance advantage
-over software implementations by harnessing the power
-of existing cache coherence mechanisms which are already
-fast, automatic, and parallel. 
-The source of superior performance, however, is also the root of their
-weakness: existing implementations of hardware transactions 
-will abort when the working set exceeds the
-capacity of the underlying hardware.
-Before we can incorporate this nascent technology into high-performing
-concurrent data structures, 
-it is necessary to first investigate the physical capacity
-constraints of hardware transactions to inform the design
-of such data structures.
-We were able to divine details of the HTM implementation
-of Intel's Haswell and IBM's Power8 architectures from 
-our investigation of the capacity constraints and these 
-characterizations provide much needed understanding of the
-systems for which practitioners design algorithms and 
-data structures.
+Hardware transactions offer a performance advantage over software
+implementations by harnessing the power of existing cache coherence mechanisms
+which are already fast, automatic, and parallel. The source of superior
+performance, however, is also the root of their weakness: existing
+implementations of hardware transactions abort when the working set exceeds the
+capacity of the underlying hardware. Before we can incorporate this nascent
+technology into high-performing concurrent data structures, it is necessary to
+investigate these capacity constraints in order to better inform programmers of
+their abilities and limitations.
+
+This paper provides the first empirical study of the ``capacity envelop'' of HTM
+in Intel's Haswell and IBM's Power8 architectures, providing what we believe is
+a much needed understanding of the extent to which one can use these systems to
+replace locks.
 \end{abstract}
 % \end{minipage}
 % \end{center}
