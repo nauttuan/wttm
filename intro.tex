@@ -52,23 +52,6 @@ system using restricted HTM
 is justified by the expected performance.  Characterizing
 these conditions is the goal of this paper. 
 
-\begin{figure}[h]%[ht!]
-\centering
-\begin{minipage}[b]{.45\linewidth}
-\centering
-\includegraphics[width=\linewidth]{images/wttm_capacity_read_intel}
-\caption{Lines Read vs Success Rate.}
-\label{fig:wttm_capacity_read_intel}
-\end{minipage}%
-\quad
-\begin{minipage}[b]{.45\linewidth}
-\centering
-\includegraphics[width=\linewidth]{images/wttm_capacity_write_intel}
-\caption{Lines Written vs Success Rate.}
-\label{fig:wttm_capacity_write_intel}
-\end{minipage}
-\end{figure}
-
 Transactions require the logical 
 maintenance of \defn{read sets}, the set
 of memory locations that are read within a 
@@ -83,7 +66,6 @@ consistency before the transaction
 \defn{commits}, meaning that the modifications to 
 memory are visible to other threads.
 
-
 Transactions may \defn{abort} due to a conflict with
 another concurrently executing transaction when an
 inconsistent memory state is detected, 
@@ -97,38 +79,16 @@ from \textit{capacity aborts} when the underlying hardware
 lacks sufficient resources to maintain the
 read or write set.
 
-\paragraph{Experimental Setup}
 In this paper we summarize results of experiments 
 that determine how the
 read and write sets are maintained in hardware for recent 
-Intel x86 and IBM Power8 architectures. In particular,
-the Intel machine contains a Haswell i7-4770 processor with 4
-cores running at 3.4GHz, 8 hardware threads, 64B cache lines, an 8MB
-16-way shared L3 cache, 256KB per-core 8-way L2 caches, 
-and 32KB per-core 8-way L1 caches.
-We also tested an IBM Power8 processor with 10 cores running at 3.4GHz,
-80 hardware threads, 128B cache lines, an 80MB 8-way
-shared L3 cache, and 64KB per-core 8-way L1 caches.
-All experiments are written in C and compiled with GCC, 
-optimization level
-\texttt{-O0}.\footnote{We compiled with \texttt{-O0} because
-we found that higher optimization levels sometimes 
-caused spurious transaction
-aborts, thus confounding our results.} Our experiments use the GCC
-hardware transactional memory intrinsics interface.\footnote{The x86
-intrinsics are \texttt{\_xbegin} and \texttt{\_xend}; 
-the PowerPC intrinsics are
-\texttt{\_\_builtin\_tbegin} and \texttt{\_\_builtin\_tend}.}
-
+Intel x86 and IBM Power8 architectures. 
 The focus of our experiments is to explore scenarios where these
 capacity aborts are inevitable so that we know 
 when hardware transactions are
 not a feasible synchronization solution at all, 
-even in the case of no contention. For example, 
-\figreftwo{wttm_capacity_read_intel}{wttm_capacity_write_intel}
-illustrate the maximum read and write capacity, respectively,
-of a hardware transaction on an Intel processor.  In \secref{capacity}
-we will explore other types of constraints imposed on
+even in the case of no contention. In \secref{capacity}
+we will explore the types of constraints imposed on
 HTM operation by the Intel and IBM implementations.
 This characterization should inform
 software development attempting to use the newly available HTM support 
