@@ -1,96 +1,157 @@
 \section{Introduction}
-% Random notes:
-% \begin{itemize}
-% \item Use \defn{defn} blocks to define terms, such as 
-% \defn{hardware transactional memory}.  However, \defn{defn} 
-% blocks should always have an accompanying definition.  Their
-% use is a good mnemonic for remembering that one should define
-% important terms.
-% \item In text, \textit{italics} or \emph{emphasis} blocks
-% are used to draw attention to an otherwise well-defined term
-% or phrase.  
-% \end{itemize}
 
 
-
-
-As Moore's law plateaus~\cite{Vardi14} the transition
-to multicore microprocessors is in full swing. High-performing concurrent
-programs require the effective utilization of these multicore chips, but 
-synchronization overhead and complexity has been a
-major roadblock to building fast concurrent programs.
+As Moore's law has plateaued~\cite{Vardi14} over the
+last several years, the number of researchers investigating 
+technologies for fast concurrent programs has doubled 
+approximately every two years~\cite{ACM}.  High performance
+concurrent programs require the effective utilization of 
+ever-increasing core counts and perhaps no technology
+has been more anticipated toward this end than Hardware 
+Transactional Memory (HTM).  
 Transactional memory~\cite{HerlihyMo93} was originally
 proposed as a programming abstraction that could achieve
 high performance while maintaining the simplicity of 
-coarse-grained locks~\cite{YooHuLa13}.
-Recently, Intel~\cite{Reinders12,IntelISAX12} and
+coarse-grained locks~\cite{YooHuLa13} and recently 
+Intel~\cite{Reinders12,IntelISAX12} and
 IBM~\cite{CainMiFr13,Merritt11,IBMPower8Overview14} have both
-introduced mainstream multicores supporting restricted \defn{hardware
-transactional memory} (HTM) and a new ingredient in the solution 
-to the synchronization problem is on the horizon. The Intel and IBM
-systems are both \emph{restricted} in that they are 
-a \emph{best effort} hardware transactional memory
-system~\cite{Roman12,IntelISAX12,CainMiFr13,IBMPower8Optimization14}.
-This means that there is no guarantee that an attempted 
-transaction will complete successfully, even in the absence 
-of memory contention from other cores, due to hardware restrictions
-arising from the imperfect implementation.  
+introduced mainstream multicore processors 
+supporting \defn{restricted} HTM.  
 Hardware transactions are faster than traditional
 coarse-grained locks and software
-transactions~\cite{YooHuLa13}~\cite{CascavalBlMi08}, 
+transactions~\cite{YooHuLa13,CascavalBlMi08}, 
 yet they have similar
 performance to well-engineered software using fine-grained 
 locks and atomic instructions (e.g.
 \proc{compare-and-swap}~\cite{Herlihy91})~\cite{YooHuLa13}. 
-However, \emph{restricted} HTM introduces a wrinkle into 
-this otherwise panacean technology: sometimes transactions
-will fail even when executed serially due to limitations
-of the underlying hardware implementation.  The conditions
+The Intel and IBM
+systems are both \emph{restricted} in that they are 
+a \emph{best effort} hardware transactional memory
+implementation~\cite{Roman12,IntelISAX12,CainMiFr13,IBMPower8Optimization14}:
+transactions can fail due to limitations
+of the underlying hardware implementation even when 
+executed serially.  The conditions
 under which such a failure may occur dramatically impacts
 whether the complexity of designing a software 
 system using restricted HTM
 is justified by the expected performance.  Characterizing
 these conditions is the goal of this paper. 
 
+\paragraph{Related Work}
+Recently, several researchers have considered variations 
+of hybrid transactional memory (HyTM) 
+systems~\cite{DamronFeLe06,DalessandroSpSc10,MatveevSh15}
+which exploit the performance potential of recent HTM
+implementations, while preserving the semantics and
+progress guarantees of software transactional memory (STM)
+systems~\cite{ShavitTo95}.  Underlying
+all of this work is the assumption that hardware constraints
+on the size of transactions are sufficiently unforgiving
+that elaborate workarounds are justified.  For instance, Xiang et 
+al.~\cite{XiangSc15,XiangSc13} propose the decomposition of
+a transaction into a nontransactional read-only 
+planning phase and a transactional write-mostly 
+completion phase in order to reduce the size of the
+actual transaction.  Similarly, Wang et al.~\cite{WangQiLi14} 
+use a similar nontransactional execution phase
+and a transactional commit phase in the context
+of an in-memory database in order to limit the
+actual transaction to the database meta-data and 
+excluding the payload data.
+Likewise, Leis et al.~\cite{LeisKeNe14}
+use \emph{timestamp ordering}~\cite{Carey83} to glue together
+smaller transactions in order to compose one large
+transaction in an in-memory database.  
+
+
+% ~\cite{XiangSc15,XiangSc13} partitioned transactions ParT - planning phase and completion phase
+
+% ~\cite{LesaniLuMo13} specifying semantics of TM w/ nontransactional code - tempting to use HTM whenever possible, 
+% as it inherently interacts correctly
+% wth nontransactional code - as though every 
+% nontransactional instruction were an individual transaction.  
+% Slow path is incurred when the HTM fails.
+% Understanding the circumstances when this happens is essential 
+% to reasoning about such design tradeoffs.
+
+% ~\cite{LeisKeNe14} in-memory databases, uses Timestamp 
+% Ordering~\cite{Carey83} to glue together smaller transactions.
+% Assumes that read and write set must fit in L1, a misconception
+% - in reality, a strong assymmetry in the size of the read and
+% write sets exists in the Intel system.
+
+% ~\cite{WangQiLi14} decompose in-memory db transactions into execution and commit, using RTM only for commit - transactional state scales as size of meta-data, not payload data
+
+
+
+\paragraph{Background}
 Transactions require the logical 
 maintenance of \defn{read sets}, the set
 of memory locations that are read within a 
 transaction, and \defn{write sets}, the set
 of memory locations that are written within 
-a transaction~\cite{HerlihyMo93}. When transactions execute, 
-local reads and writes to memory 
-are tracked and recorded in
-corresponding read and write sets. Upon 
+a transaction~\cite{HerlihyMo93}. Upon 
 completion of a transaction, the memory state is validated for 
 consistency before the transaction
-\defn{commits}, meaning that the modifications to 
-memory are visible to other threads.
-
-Transactions may \defn{abort} due to a conflict with
-another concurrently executing transaction when an
-inconsistent memory state is detected, 
-such as when one or many memory locations
-in one thread's write set intersects one or 
-many memory locations in another
-thread's read or write set.  We call this a
-\defn{conflict abort}.  In addition to \defn{conflict aborts},
-hardware transactions specifically suffer 
-from \textit{capacity aborts} when the underlying hardware
+\defn{commits}, making modifications to memory 
+visible to other threads.  In addition to \defn{conflict aborts}
+that occur due to concurrent transactional accesses
+to the same memory address\footnote{Specifically,
+a conflict abort occurs when one thread's write set 
+intersects at least one memory location in the 
+read or write set of another thread}, hardware transactions suffer 
+from \defn{capacity aborts} when the underlying hardware
 lacks sufficient resources to maintain the
-read or write set.
+read or write set of an attempted transaction.
 
-In this paper we summarize results of experiments 
-that determine how the
-read and write sets are maintained in hardware for recent 
-Intel x86 and IBM Power8 architectures. 
-The focus of our experiments is to explore scenarios where these
-capacity aborts are inevitable so that we know 
-when hardware transactions are
-not a feasible synchronization solution at all, 
-even in the case of no contention. In \secref{capacity}
-we will explore the types of constraints imposed on
-HTM operation by the Intel and IBM implementations.
+Read and write sets are often maintained in hardware 
+using an extension to an existing cache hierarchy.
+Caches in modern processors are organized in \defn{sets}
+and \defn{ways}, where a surjection from memory address to
+set number is used in hardware to restrict the number of
+locations that must be checked on a cache access.  The
+number of ways per set is the \defn{associativity} of the cache
+and an address mapping to a particular set is eligible
+to be stored in any one of the associated ways.  To
+maintain the read and write sets of a transaction, one can
+``lock'' each accessed memory address 
+into the cache until the transaction
+commits.  The logic of the cache coherence protocol
+can also be extended to ensure atomicity of transactions
+by noting whether or not a cache-to-cache transfer of 
+data involves an element of a transaction's read or write
+set.  These extensions to the caches and the cache coherence
+protocol are very natural and lead to high performance, 
+however the nature of the design reveals an inherent weakness:
+caches are finite in size and associativity, thus such an
+architecture could never guarantee forward progress for 
+arbitrarily large transactions.
+
+
+
+\paragraph{Contributions}
+In this paper we summarize results of the first
+empirical study of the ``capacity envelope'' for
+recent Intel Haswell and IBM Power8 restricted HTM
+implementations using experiments that determine how the
+read and write sets are maintained in hardware. 
+We conclude that the read and write sets are maintained
+in the L3 and L1 cache, respectively, for the Intel Haswell.  
+In addition, the IBM Power8 dedicates a small 64-entry 
+cache per hardware thread.
 This characterization should inform
 software development attempting to use the newly available HTM support 
-and hybrid hardware / software transactional memory
-systems~\cite{DamronFeLe06,MatveevSh13}.
+and HyTM systems~\cite{DamronFeLe06,MatveevSh13,MatveevSh15}.
+
+% ~\cite{WangGaWu12} unexpected cache locality effects from IBM's first
+% implementation operating out of L2 - high startup costs and reduced 
+% temporal locality in nontransactional sections.
+
+% ~\cite{Drepper07} in the spirit of Drepper's characterization of 
+% the general memory system.
+
+% ~\cite{WangBuLi14} exploring design space of hybrid TM with 
+% compiler technique like computation splitting and privatization
+% - they do a small evaluation of Intel's TM limitations
+
+

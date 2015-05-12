@@ -30,9 +30,10 @@ per-core 8-way L1 caches. All experiments are written in C and compiled with
 GCC, optimization level \texttt{-O0}.\footnote{We compiled with \texttt{-O0}
 because we found that higher optimization levels sometimes caused spurious
 transaction aborts, thus confounding our results.} Our experiments use the GCC
-hardware transactional memory intrinsics interface.\footnote{The x86 intrinsics
-are \texttt{\_xbegin} and \texttt{\_xend}; the PowerPC intrinsics are
-\texttt{\_\_builtin\_tbegin} and \texttt{\_\_builtin\_tend}.}
+hardware transactional memory intrinsics interface.
+% \footnote{The x86 intrinsics
+% are \texttt{\_xbegin} and \texttt{\_xend}; the PowerPC intrinsics are
+% \texttt{\_\_builtin\_tbegin} and \texttt{\_\_builtin\_tend}.}
 
 \paragraph{Intel}
 We experimentally support the hypothesis
