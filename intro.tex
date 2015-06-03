@@ -4,8 +4,8 @@
 As Moore's law has plateaued~\cite{Vardi14} over the
 last several years, the number of researchers investigating 
 technologies for fast concurrent programs has doubled 
-approximately every two years~\cite{ACM}.  High performance
-concurrent programs require the effective utilization of 
+approximately every two years~\cite{ACM}\tannote{should remove this reference}. 
+High performance concurrent programs require the effective utilization of 
 ever-increasing core counts and perhaps no technology
 has been more anticipated toward this end than Hardware 
 Transactional Memory (HTM).  
@@ -63,27 +63,6 @@ use \emph{timestamp ordering}~\cite{Carey83} to glue together
 smaller transactions in order to compose one large
 transaction in an in-memory database.  
 
-
-% ~\cite{XiangSc15,XiangSc13} partitioned transactions ParT - planning phase and completion phase
-
-% ~\cite{LesaniLuMo13} specifying semantics of TM w/ nontransactional code - tempting to use HTM whenever possible, 
-% as it inherently interacts correctly
-% wth nontransactional code - as though every 
-% nontransactional instruction were an individual transaction.  
-% Slow path is incurred when the HTM fails.
-% Understanding the circumstances when this happens is essential 
-% to reasoning about such design tradeoffs.
-
-% ~\cite{LeisKeNe14} in-memory databases, uses Timestamp 
-% Ordering~\cite{Carey83} to glue together smaller transactions.
-% Assumes that read and write set must fit in L1, a misconception
-% - in reality, a strong assymmetry in the size of the read and
-% write sets exists in the Intel system.
-
-% ~\cite{WangQiLi14} decompose in-memory db transactions into execution and commit, using RTM only for commit - transactional state scales as size of meta-data, not payload data
-
-
-
 \paragraph{Background}
 Transactions require the logical 
 maintenance of \defn{read sets}, the set
@@ -127,8 +106,6 @@ caches are finite in size and associativity, thus such an
 architecture could never guarantee forward progress for 
 arbitrarily large transactions.
 
-
-
 \paragraph{Contributions}
 In this paper we summarize results of the first
 empirical study of the ``capacity envelope'' for
@@ -142,16 +119,5 @@ cache per hardware thread.
 This characterization should inform
 software development attempting to use the newly available HTM support 
 and HyTM systems~\cite{DamronFeLe06,MatveevSh13,MatveevSh15}.
-
-% ~\cite{WangGaWu12} unexpected cache locality effects from IBM's first
-% implementation operating out of L2 - high startup costs and reduced 
-% temporal locality in nontransactional sections.
-
-% ~\cite{Drepper07} in the spirit of Drepper's characterization of 
-% the general memory system.
-
-% ~\cite{WangBuLi14} exploring design space of hybrid TM with 
-% compiler technique like computation splitting and privatization
-% - they do a small evaluation of Intel's TM limitations
 
 

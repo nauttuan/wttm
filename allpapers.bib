@@ -287,64 +287,66 @@
 
 @string{ucbeecs = {Department of Electrical Engineering and Computer Science, University of California at Berkeley}}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BEGIN WTTM REFERENCES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 @inproceedings{MatveevSh15,
  author = {Matveev, Alexander and Shavit, Nir},
- title = {Reduced Hardware NOrec: A Safe and Scalable Hybrid Transactional Memory},
- booktitle = {ASPLOS},
- year = {2015}
-} 
-
-@inproceedings{WangBuLi14,
-title = {Exploring the Performance and Programmability
-Design Space of Hardware Transactional Memory},
-year = 2014,
-booktitle = {TRANSACT},
-author = {Wang, Mike Dai and Burcea, Mihai and Li, Linghan and Sharifymoghaddam, Sahel and Steffan, Greg and Amza, Cristiana}
+ title = {Reduced Hardware {NOrec}: A Safe and Scalable Hybrid Transactional Memory},
+ booktitle = {Proceedings of the Twentieth International Conference on Architectural Support for Programming Languages and Operating Systems},
+ series = {ASPLOS '15},
+ year = {2015},
+ location = {Istanbul, Turkey},
+ pages = {59--71},
+ numpages = {13},
+ publisher = {ACM},
+ address = {New York, NY, USA},
 }
-
-@article{AlistarhKoKu14,
-  author    = {Alistarh, Dan and Kopinsky, Justin and Kuznetsov, Petr and Ravi, Srivatsan and Shavit, Nir},
-  title     = {Inherent Limitations of Hybrid Transactional Memory},
-  journal   = {CoRR},
-  year      = {2014}
-}
-
-@misc{Drepper07,
-    author = {Ulrich Drepper},
-    title = {What Every Programmer Should Know About Memory},
-    year = {2007}
-}
-
 
 @inproceedings{WangQiLi14,
  author = {Wang, Zhaoguo and Qian, Hao and Li, Jinyang and Chen, Haibo},
  title = {Using Restricted Transactional Memory to Build a Scalable In-memory Database},
  booktitle = {Proceedings of the Ninth European Conference on Computer Systems},
- series = {EuroSys},
- year = {2014}
-} 
+ series = {EuroSys '14},
+ year = {2014},
+ isbn = {978-1-4503-2704-6},
+ location = {Amsterdam, The Netherlands},
+ pages = {26:1--26:15},
+ articleno = {26},
+ numpages = {15},
+ url = {http://doi.acm.org/10.1145/2592798.2592815},
+ doi = {10.1145/2592798.2592815},
+ acmid = {2592815},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
 
 @inproceedings{XiangSc15,
  author = {Xiang, Lingxiang and Scott, Michael L.},
  title = {Software Partitioning of Hardware Transactions},
- booktitle = {PPoPP},
- year = {2015}
-} 
+ booktitle = {Proceedings of the 20th ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming},
+ series = {PPoPP '15},
+ year = {2015},
+ isbn = {978-1-4503-3205-7},
+ location = {San Francisco, CA, USA},
+ pages = {76--86},
+ numpages = {11},
+ url = {http://doi.acm.org/10.1145/2688500.2688506},
+ doi = {10.1145/2688500.2688506},
+ acmid = {2688506},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {Compiler Automation, Hardware Transactional Memory, Partitioned Transactions},
+}
 
-@inproceedings{XiangSc13,
+@conference{XiangSc13,
 author = {Xiang, Lingxiang and Scott, Michael L.},
-booktitle = {WTTM},
-year = 2013,
-title = {Composable Partitioned Transactions}
-}
-
-@inproceedings{LesaniLuMo13,
-author = {Lesani, Mohsen and Luchangco, Victor and Moir, Mark},
-title = {Specifying Transactional Memories with Nontransactional
-Operations},
-year = 2013,
-booktitle = {WTTM}
-}
+title = {Composable Partitioned Transactions},
+booktitle = {Workshop on the Theory of Transactional Memory},
+year = {2013},
+location = {Jerusalem, Israel},
+} 
 
 @inproceedings{LeisKeNe14,
   author    = {Viktor Leis and
@@ -359,135 +361,240 @@ booktitle = {WTTM}
  author = {Carey, Michael James},
  title = {Modeling and Evaluation of Database Concurrency Control Algorithms},
  year = {1983},
+ note = {AAI8413325},
  publisher = {University of California, Berkeley},
 } 
-
 
 @article{Vardi14,
  author = {Vardi, Moshe Y.},
  title = {Moore's Law and the Sand-heap Paradox},
- journal = {Commun. ACM},
- year = {2014}
-}
+ journal = {Communications of the ACM},
+ issue_date = {May 2014},
+ volume = {57},
+ number = {5},
+ month = may,
+ year = {2014},
+ issn = {0001-0782},
+ pages = {5--5},
+ numpages = {1},
+ url = {http://doi.acm.org/10.1145/2600347},
+ doi = {10.1145/2600347},
+ acmid = {2600347},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
 
 @article{Herlihy91,
  author = {Herlihy, Maurice},
  title = {Wait-free Synchronization},
- journal = {ACM Trans. Program. Lang. Syst.},
- year = {1991}
-}
+ journal = {ACM Transactions on Programming Languages and Systems},
+ issue_date = {Jan. 1991},
+ volume = {13},
+ number = {1},
+ month = jan,
+ year = {1991},
+ issn = {0164-0925},
+ pages = {124--149},
+ numpages = {26},
+ url = {http://doi.acm.org/10.1145/114005.102808},
+ doi = {10.1145/114005.102808},
+ acmid = {102808},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {linearization, wait-free synchronization},
+} 
 
 @inproceedings{HerlihyMo93,
  author = {Herlihy, Maurice and Moss, J. Eliot B.},
  title = {Transactional Memory: Architectural Support for Lock-free Data Structures},
- booktitle = {ISCA},
- year = {1993}
+ booktitle = {Proceedings of the 20th Annual International Symposium on Computer Architecture},
+ series = {ISCA '93},
+ year = {1993},
+ isbn = {0-8186-3810-9},
+ location = {San Diego, California, USA},
+ pages = {289--300},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/165123.165164},
+ doi = {10.1145/165123.165164},
+ acmid = {165164},
+ publisher = {ACM},
+ address = {New York, NY, USA},
 } 
 
 @inproceedings{YooHuLa13,
  author = {Yoo, Richard M. and Hughes, Christopher J. and Lai, Konrad and Rajwar, Ravi},
  title = {Performance Evaluation of Intel; Transactional Synchronization Extensions for High-performance Computing},
  booktitle = {Proceedings of the International Conference on High Performance Computing, Networking, Storage and Analysis},
- year = {2013}
-}
+ series = {SC '13},
+ year = {2013},
+ isbn = {978-1-4503-2378-9},
+ location = {Denver, Colorado},
+ pages = {19:1--19:11},
+ articleno = {19},
+ numpages = {11},
+ url = {http://doi.acm.org/10.1145/2503210.2503232},
+ doi = {10.1145/2503210.2503232},
+ acmid = {2503232},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {high-performance computing, transactional memory},
+} 
 
 @inproceedings{CainMiFr13,
  author = {Cain, Harold W. and Michael, Maged M. and Frey, Brad and May, Cathy and Williams, Derek and Le, Hung},
  title = {Robust Architectural Support for Transactional Memory in the Power Architecture},
- series = {ISCA},
- year = {2013}
-} 
+ booktitle = {Proceedings of the 40th Annual International Symposium on Computer Architecture},
+ series = {ISCA '13},
+ year = {2013},
+ isbn = {978-1-4503-2079-5},
+ location = {Tel-Aviv, Israel},
+ pages = {225--236},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/2485922.2485942},
+ doi = {10.1145/2485922.2485942},
+ acmid = {2485942},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}  
 
 @misc{Reinders12,
 author={Reinders, James},
 title={Transactional Synchronization in Haswell},
-howpublished={\url{https://software.intel.com/en-us/blogs/2012/02/07/transactional-synchronization-in-haswell}},
-year={2012}
+howpublished={Intel Developer Zone},
+year={2012},
+month={February},
 }
 
+% should be removed
 @misc{ACM,
 author = {ACM},
 title={ACM Digital Library},
 howpublished={\url{http://www.acm.org/}}
 }
-
+% should be removed
 
 @misc{Roman12,
 author={Dementiev, Roman},
 title={Exploring Intel Transactional Synchronization Extensions with Intel Software Development Emulator},
-howpublished={\url{https://software.intel.com/en-us/blogs/2012/11/06/exploring-intel-transactional-synchronization-extensions-with-intel-software}},
-year={2012}
+howpublished={Intel Developer Zone},
+year={2012},
+month={November},
 }
 
 @misc{Merritt11,
 author={Merritt, Rick},
 title={{IBM} Plants Transactional Memory in CPU},
-howpublished={\url{http://tiny.cc/oj0zxx}},
-year={2011}
+year={2011},
+Month={August},
 }
 
-@misc{IntelISAX12,
-author={Intel},
-title={Intel Architecture Instruction Set Extensions Programming Reference},
-number={319433-012A},
-year={2012}
+@TECHREPORT{IntelISAX12,
+   author={Intel},
+   title={Intel Architecture Instruction Set Extensions Programming Reference},
+   institution = "Intel Corporation",
+   type = "Developer Manual",
+   number = "319433-012A",
+   month = feb,
+   year = 2012,
 }
 
-@misc{IBMPower8Overview14,
+@TECHREPORT{IBMPower8Overview14,
 author={IBM},
-title={IBM Power Systems S814 and S824 Technical Overview and Introduction},
+title={{IBM} Power Systems {S814} and {S824} Technical Overview and Introduction},
+institution = "IBM Corporation",
+type = "Redpaper",
 number={REDP-5097-00},
-year={2014}
+year={2014},
+month = aug,
 }
 
-@misc{IBMPower8Optimization14,
+@TECHREPORT{IBMPower8Optimization14,
 author={IBM},
-title={Performance Optimization and Tuning Techniques for IBM Processors, including IBM POWER8},
+title={Performance Optimization and Tuning Techniques for {IBM} Processors, including {IBM} {POWER8}},
+institution = "IBM Corporation",
+type = "Redbooks",
 number={SG24-8171-00},
-year={2014}
+year={2014},
+month={July},
 }
 
 @article{CascavalBlMi08,
  author = {Cascaval, Calin and Blundell, Colin and Michael, Maged and Cain, Harold W. and Wu, Peng and Chiras, Stefanie and Chatterjee, Siddhartha},
  title = {Software Transactional Memory: Why Is It Only a Research Toy?},
  journal = {Queue},
- year = {2008}
+ issue_date = {September 2008},
+ volume = {6},
+ number = {5},
+ month = sep,
+ year = {2008},
+ issn = {1542-7730},
+ pages = {40:46--40:58},
+ articleno = {40},
+ numpages = {13},
+ url = {http://doi.acm.org/10.1145/1454456.1454466},
+ doi = {10.1145/1454456.1454466},
+ acmid = {1454466},
+ publisher = {ACM},
+ address = {New York, NY, USA},
 } 
 
 @inproceedings{DalessandroSpSc10,
  author = {Dalessandro, Luke and Spear, Michael F. and Scott, Michael L.},
- title = {NOrec: Streamlining STM by Abolishing Ownership Records},
- booktitle = {PPoPP},
- year = {2010}
-}
+ title = {{NOrec}: Streamlining {STM} by Abolishing Ownership Records},
+ booktitle = {Proceedings of the 15th ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming},
+ series = {PPoPP '10},
+ year = {2010},
+ isbn = {978-1-60558-877-3},
+ location = {Bangalore, India},
+ pages = {67--78},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1693453.1693464},
+ doi = {10.1145/1693453.1693464},
+ acmid = {1693464},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {ownership records, software transactional memory, transactional memory, transactional memory models},
+} 
 
-@article{DamronFeLe06,
+@inproceedings{DamronFeLe06,
  author = {Damron, Peter and Fedorova, Alexandra and Lev, Yossi and Luchangco, Victor and Moir, Mark and Nussbaum, Daniel},
  title = {Hybrid Transactional Memory},
- journal = {SIGPLAN Not.},
- year = {2006}
+ booktitle = {Proceedings of the 12th International Conference on Architectural Support for Programming Languages and Operating Systems},
+ series = {ASPLOS '06},
+ year = {2006},
+ isbn = {1-59593-451-0},
+ location = {San Jose, California, USA},
+ pages = {336--346},
+ numpages = {11},
+ url = {http://doi.acm.org/10.1145/1168857.1168900},
+ doi = {10.1145/1168857.1168900},
+ acmid = {1168900},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {transactional memory},
 } 
 
 @inproceedings{MatveevSh13,
  author = {Matveev, Alexander and Shavit, Nir},
  title = {Reduced Hardware Transactions: A New Approach to Hybrid Transactional Memory},
- series = {SPAA},
- year = {2013}
+ booktitle = {Proceedings of the Twenty-fifth Annual ACM Symposium on Parallelism in Algorithms and Architectures},
+ series = {SPAA '13},
+ year = {2013},
+ isbn = {978-1-4503-1572-2},
+ location = {Montr\&\#233;al, Qu\&\#233;bec, Canada},
+ pages = {11--22},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/2486159.2486188},
+ doi = {10.1145/2486159.2486188},
+ acmid = {2486188},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {hybrid transactional memory, multicore software, obstruction-freedom},
 } 
 
-@article{AlistarhKoKu14,
-  author    = {Alistarh, Dan and Kopinsky, Justin and Kuznetsov, Petr and Ravi, Srivatsan and Shavit, Nir},
-  title     = {Inherent Limitations of Hybrid Transactional Memory},
-  journal   = {CoRR},
-  year      = {2014}
-}
-
-@inproceedings{WangGaWu12,
- author = {Wang, Amy and Gaudet, Matthew and Wu, Peng and Amaral, Jos{\'e} Nelson and Ohmacht, Martin and Barton, Christopher and Silvera, Raul and Michael, Maged},
- title = {Evaluation of Blue Gene/Q Hardware Support for Transactional Memories},
- booktitle = {PACT},
- year = {2012}
-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% END WTTM REFERENCES %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @book{Klotz02,
   title={Graph Coloring Algorithms},
