@@ -28,9 +28,12 @@ caches. We also tested an IBM Power8 processor with 10 cores running at 3.4GHz,
 80 hardware threads, 128B cache lines, an 80MB 8-way shared L3 cache, and 64KB
 per-core 8-way L1 caches. All experiments are written in C and compiled with
 GCC, optimization level \texttt{-O0}.\footnote{We compiled with \texttt{-O0}
-because we found that higher optimization levels sometimes caused spurious
-transaction aborts, thus confounding our results.} Our experiments use the GCC
-hardware transactional memory intrinsics interface.
+because it generates precisely the assembly that we wish to test (ie. a simple
+sequence of memory accesses with very few supporting arithmetic instructions), whereas
+higher optimization levels sometimes optimize away the entire loop (eg.
+read-only tests).} Our code uses the GCC
+hardware transactional memory intrinsics interface and is available
+online~\cite{Nguyen15}.
 % \footnote{The x86 intrinsics
 % are \texttt{\_xbegin} and \texttt{\_xend}; the PowerPC intrinsics are
 % \texttt{\_\_builtin\_tbegin} and \texttt{\_\_builtin\_tend}.}
@@ -84,7 +87,14 @@ The {L3} cache of the Intel machine has a maximum
 capacity of $2^{17}$ ($=131,072$) cache lines and it is unlikely
 for much more than half of the total capacity to 
 fit perfectly into the {L3} due to
-the hash function mapping physical address to L3 cache bank. 
+the hash function mapping physical address to L3 cache bank.
+This hash function gives rise to a
+'balls in bins' behavior for the load on each cache set.  That is, 
+$n$ cache lines can be accessed such that
+the most loaded set contains $\Theta(\lg n / \lg \lg n) = A$ 
+cache lines~\cite{Gonnet81}, where $A$ is the associativity of the cache. 
+We observe empirically in this setting (ie. $A=16$) that
+the maximum capacity is roughly half of the {L3}.
 
 \figref{wttm_stride_read_intel} shows the result of a strided read-only
 access experiment. The stride amount indicates 
