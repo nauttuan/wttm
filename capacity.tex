@@ -28,9 +28,9 @@ caches. We also tested an IBM Power8 processor with 10 cores running at 3.4GHz,
 80 hardware threads, 128B cache lines, an 80MB 8-way shared L3 cache, and 64KB
 per-core 8-way L1 caches. All experiments are written in C and compiled with
 GCC, optimization level \texttt{-O0}.\footnote{We compiled with \texttt{-O0}
-because it generates precisely the assembly that we wish to test (ie. a simple
+because it generates precisely the assembly that we wish to test (i.e. a simple
 sequence of memory accesses with very few supporting arithmetic instructions), whereas
-higher optimization levels sometimes optimize away the entire loop (eg.
+higher optimization levels sometimes optimize away the entire loop (e.g.
 read-only tests).} Our code uses the GCC
 hardware transactional memory intrinsics interface and is available
 online~\cite{Nguyen15}.
@@ -93,12 +93,12 @@ This hash function gives rise to a
 $n$ cache lines can be accessed such that
 the most loaded set contains $\Theta(\lg n / \lg \lg n) = A$ 
 cache lines~\cite{Gonnet81}, where $A$ is the associativity of the cache. 
-We observe empirically in this setting (ie. $A=16$) that
+We observe empirically in this setting (i.e. $A=16$) that
 the maximum capacity is roughly half of the {L3}.
 
 \figref{wttm_stride_read_intel} shows the result of a strided read-only
 access experiment. The stride amount indicates 
-the number of cache lines per
+the number of cache lines stepped over per
 iteration (e.g. reading cache lines 1, 5, 9, 13, 17 etc. 
 indicates a stride of 4) and each data point 
 represents the maximum number of cache
@@ -112,7 +112,7 @@ $2^{14}$ ($=16,384$) cache lines and commit.
 We can see that the number of cache lines that can be 
 read in a single transaction is generally
 halved as we double the stride amount, presumably 
-because the access pattern
+because the pattern
 accesses progressively fewer cache sets while 
 completely skipping over the other sets.
 It is important to note that the plot plateaus 
