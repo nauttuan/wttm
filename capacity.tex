@@ -48,6 +48,7 @@ store read sets and the L1 cache to store write sets.
 \begin{minipage}[b]{.45\linewidth}
 \centering
 \includegraphics[width=\linewidth]{images/wttm_capacity_read_intel}
+\vspace{-25pt}
 \caption{Lines Read vs Success Rate.}
 \label{fig:wttm_capacity_read_intel}
 \end{minipage}%
@@ -55,6 +56,7 @@ store read sets and the L1 cache to store write sets.
 \begin{minipage}[b]{.45\linewidth}
 \centering
 \includegraphics[width=\linewidth]{images/wttm_capacity_write_intel}
+\vspace{-25pt}
 \caption{Lines Written vs Success Rate.}
 \label{fig:wttm_capacity_write_intel}
 \end{minipage}
@@ -65,14 +67,16 @@ store read sets and the L1 cache to store write sets.
 \begin{minipage}[b]{.45\linewidth}
 \centering
 \includegraphics[width=\linewidth]{images/wttm_stride_read_intel}
-\caption{$\log_2{\textrm{Stride}}$ vs $\log_2{\textrm{Lines Readable}}$.}
+\vspace{-25pt}
+\caption{$\log_2{\textrm{Stride}}$ vs $\log_2{\textrm{Lines Read}}$.}
 \label{fig:wttm_stride_read_intel}
 \end{minipage}%
 \quad
 \begin{minipage}[b]{.45\linewidth}
 \centering
 \includegraphics[width=\linewidth]{images/wttm_stride_write_intel}
-\caption{$\log_2{\textrm{Stride}}$ vs $\log_2{\textrm{Lines Writable}}$.}
+\vspace{-25pt}
+\caption{$\log_2{\textrm{Stride}}$ vs $\log_2{\textrm{Lines Written}}$.}
 \label{fig:wttm_stride_write_intel}
 \end{minipage}
 \end{figure}
@@ -177,6 +181,7 @@ each thread is allocated its own copy.
 \begin{minipage}[b]{.45\linewidth}
 \centering
 \includegraphics[width=\linewidth]{images/wttm_capacity_readwrite_ibm}
+\vspace{-25pt}
 \caption{Lines Read/Written vs Success Rate.}
 \label{fig:wttm_capacity_readwrite_ibm}
 \end{minipage}%
@@ -184,7 +189,8 @@ each thread is allocated its own copy.
 \begin{minipage}[b]{.45\linewidth}%[ht!]
 \centering
 \includegraphics[width=\linewidth]{images/wttm_stride_readwrite_ibm}
-\caption{Stride vs Lines Readable/Writeable.}
+\vspace{-25pt}
+\caption{Stride vs Lines Read/Written.}
 \label{fig:wttm_stride_readwrite_ibm}
 \end{minipage}
 \end{figure}
@@ -224,7 +230,9 @@ caches.
 \begin{figure}[H]%[ht!]
 \centering
 \includegraphics[width=\linewidth]{images/wttm_core_or_thread_ibm}
-\caption{Number of Threads vs Committed Transactions (Thousands).}
+\vspace{-25pt}
+\caption{Number of Threads vs Aggregate/Average Committed Transactions
+(Thousands).}
 \label{fig:wttm_core_or_thread_ibm}
 \end{figure}
 
